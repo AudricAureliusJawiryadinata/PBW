@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Pengguna</title>
+    <link rel="stylesheet" href="/Admin/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Dashboard Admin</h2>
+            <ul>
+                <li><a href="/admin/AddArtist">Tambah Artis</a></li>
+                <li><a href="/admin/AddShow">Tambah Show</a></li>
+                <li><a href="/admin/AddSetList">Tambah Setlist</a></li>
+                <li><a href="/admin/ManageUser">Kelola Pengguna</a></li>
+                <li><a href="/admin/Report">Laporan</a></li>
+            </ul>
+        </aside>
+
+        <!-- Konten Utama -->
+        <main class="content">
+            <h1>Kelola Pengguna</h1>
+    <form>
+        <label for="user-search">Cari Pengguna:</label>
+        <input type="text" id="user-search" placeholder="Masukkan nama atau email pengguna">
+        <button type="submit" class="btn">Cari</button>
+    </form>
+    <ul class="user-list">
+        <li>
+            <p><strong>Username:</strong> user123</p>
+            <button class="btn">Hapus</button>
+            <button class="btn">Edit</button>
+        </li>
+        <!-- Tambahkan pengguna lainnya di sini -->
+    </ul>
+        </main>
+    </div>
+</body>
+</html>

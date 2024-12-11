@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Show</title>
+    <link rel="stylesheet" href="/Admin/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Dashboard Admin</h2>
+            <ul>
+                <li><a href="/admin/AddArtist">Tambah Artis</a></li>
+                <li><a href="/admin/AddShow">Tambah Show</a></li>
+                <li><a href="/admin/AddSetList">Tambah Setlist</a></li>
+                <li><a href="/admin/ManageUser">Kelola Pengguna</a></li>
+                <li><a href="/admin/Report">Laporan</a></li>
+            </ul>
+        </aside>
+
+        <!-- Konten Utama -->
+        <main class="content">
+            <h1>Tambah Show</h1>
+            <form>
+                <label for="show-name">Nama Show:</label>
+                <input type="text" id="show-name" placeholder="Masukkan nama show">
+                
+                <label for="show-date">Tanggal Show:</label>
+                <input type="date" id="show-date">
+                
+                <label for="show-location">Lokasi Show:</label>
+                <input type="text" id="show-location" placeholder="Masukkan lokasi show">
+                
+                <button type="submit" class="btn">Tambah Show</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
