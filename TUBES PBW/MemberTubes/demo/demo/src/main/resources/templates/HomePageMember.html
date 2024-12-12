@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetList Konser - Jelajahi Musik Lewat Daftar Lagu</title>
+    <link rel="stylesheet" href="/Member/style.css">
+</head>
+<body>
+    <!-- Navigasi -->
+    <nav id="navbar">
+        <div class="navbar-brand">SetList Konser</div>
+        <div class="navbar-menu">
+            <a href="#home">Beranda</a>
+            <a href="#artists">Artis</a>
+            <a href="#shows">Konser</a>
+            <div class="nav-auth">
+                <button id="login-btn" class="btn btn-login">Login</button>
+                <button id="register-btn" class="btn btn-register">Daftar</button>
+                <button id="logout-btn" class="btn btn-login" style="display: none;">Logout</button>
+            </div>
+
+            <section id="member-section" class="member-feature" style="display: none;">
+                <h2>Fitur Member</h2>
+                <button id="add-artist-btn" class="btn btn-primary">Tambah Artis</button>
+                <button id="add-show-btn" class="btn btn-primary">Tambah Show</button>
+                <button id="add-setlist-btn" class="btn btn-primary">Tambah Setlist</button>
+            </section>
+        </div>
+
+    </nav>
+
+    <!-- Konten Utama -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Jelajahi Musik Lewat SetList</h1>
+                <p>Temukan, bagikan, dan simpan daftar lagu dari konser favoritmu!</p>
+                <div class="hero-actions">
+                    <button id="start-btn" class="btn btn-primary">Mulai Sekarang</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fitur Utama -->
+        <section class="features">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎤</div>
+                    <h3>Daftar Lagu Konser</h3>
+                    <p>Kumpulkan dan bagikan setlist dari berbagai konser dengan mudah</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Komunitas Global</h3>
+                    <p>Terhubung dengan pecinta musik dari seluruh dunia</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Catatan Pribadi</h3>
+                    <p>Simpan kenangan dan pengalaman konsermu</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pencarian Setlist -->
+        <section id="search-section" class="search-section">
+            <h2>Temukan Setlist</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Cari Artis, Konser, atau Lagu">
+                <button id="search-btn" class="btn btn-search">Cari</button>
+            </div>
+            <div class="search-filters">
+                <select id="artist-filter">
+                    <option value="">Semua Artis</option>
+                </select>
+                <select id="genre-filter">
+                    <option value="">Semua Genre</option>
+                    <option value="rock">Rock</option>
+                    <option value="pop">Pop</option>
+                    <option value="rb">R&B</option>
+                </select>
+                <select id="year-filter">
+                    <option value="">Tahun Konser</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Artis Terpopuler -->
+        <section id="artists" class="artists-section">
+            <h2>Artis Terpopuler</h2>
+            <div id="artists-grid" class="artists-grid">
+                <!-- Artis akan dimuat secara dinamis -->
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Modal Login -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="form-container">
+                <h2>Selamat Datang Kembali</h2>
+                <p>Masuk untuk melanjutkan</p>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-login">Login</button>
+                    <p class="form-footer">Belum punya akun? <a href="#" id="register-link">Daftar Sekarang</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Registrasi -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="form-container">
+                <h2>Buat Akun Baru</h2>
+                <p>Daftar untuk mulai berbagi pengalaman konser</p>
+                <form id="register-form">
+                    <div class="input-group">
+                        <label for="register-name">Nama Lengkap</label>
+                        <input type="text" id="register-name" placeholder="Nama Lengkap" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" placeholder="Password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-confirm-password">Konfirmasi Password</label>
+                        <input type="password" id="register-confirm-password" placeholder="Konfirmasi Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-register">Daftar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SetList Konser</h4>
+                <p>Platform berbagi setlist konser terlengkap</p>
+            </div>
+            <div class="footer-section">
+                <h4>Tautan Cepat</h4>
+                <ul>
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#artists">Artis</a></li>
+                    <li><a href="#shows">Konser</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Hubungi Kami</h4>
+                <p>Email: support@setlistkonser.com</p>
+                <p>Telepon: +62 812 3456 7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
+            <p>Bersama Kami, Musik Selalu Hidup</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
