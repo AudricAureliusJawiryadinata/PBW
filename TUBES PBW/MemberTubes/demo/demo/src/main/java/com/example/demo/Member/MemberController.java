@@ -10,4 +10,12 @@ public class MemberController {
     public String showMemberPage(Model model) {
         return "Member";
     }
+    @GetMapping("/member/loginmember")
+    public String showLogInMember(Model model) {
+        return "LoginMember";
+    }
+    @GetMapping("/member/registrasimember")
+    public String showSignUpMember(Model model) {
+        return "RegistrasiMember";
+    }
 }

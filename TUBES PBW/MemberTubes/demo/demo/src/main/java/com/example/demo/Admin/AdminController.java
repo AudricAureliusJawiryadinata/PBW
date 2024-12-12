@@ -13,7 +13,10 @@ public class AdminController {
         model.addAttribute("pageTitle", "Dashboard Admin");
         return "admin"; // Harus sesuai dengan nama file HTML tanpa ekstensi (e.g., admin.html)
     }
-
+    @GetMapping("/admin/loginAdmin")
+    public String showLogInAdmin(Model model) {
+        return "LoginAdmin";
+    }
     @GetMapping("/admin/AddArtist")
     public String showAddArtistPage(Model model) {
         model.addAttribute("pageTitle", "Tambah Artis");

@@ -10,12 +10,27 @@
 
     <div class="login-container">
         <h2>Login Member</h2>
-        <form action="/login" method="post">
+        <form action="login" method="post">
             <input type="text" class="input-field" placeholder="Username" name="username" required>
             <input type="password" class="input-field" placeholder="Password" name="password" required>
-            <button type="submit" class="btn">Login</button>
+            <button type="submit" class="btn" onclick="handleLogin()">Login</button>
         </form>
+        <p class="signup-link">
+            Belum punya akun? 
+            <a href="#" onclick="navtoregmember()">Sign up</a>
+        </p>
+        <script>
+            function navtoregmember() {
+                window.location.href = "/member/registrasimember";
+            }
+    
+            function handleLogin() {
+                window.location.href = "/member";
+                console.log("Login attempted.");
+            }
+        </script>
     </div>
+    
 
 </body>
 </html>
