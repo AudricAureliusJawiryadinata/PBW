@@ -50,3 +50,19 @@ h2 {
 .btn:hover {
     background-image: linear-gradient(to right, #2ecc71, #3498db);
 }
+
+/* Style for the "Belum punya akun? Sign up" link */
+.signup-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.signup-link a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
