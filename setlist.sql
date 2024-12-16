@@ -1,0 +1,6 @@
+CREATE TABLE member (
+    id SERIAL PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
