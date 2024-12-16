@@ -7,30 +7,46 @@
     <link rel="stylesheet" href="/LogInMember/assest/LoginMemberStyles.css">
 </head>
 <body>
-
     <div class="login-container">
         <h2>Login Member</h2>
-        <form action="login" method="post">
+        
+        <!-- Success message -->
+        <p id="success-message" style="color: green;"></p>
+
+        <!-- Error message -->
+        <p id="error-message" style="color: red;"></p>
+
+        <!-- Login form -->
+        <form action="/login" method="post">
             <input type="text" class="input-field" placeholder="Username" name="username" required>
             <input type="password" class="input-field" placeholder="Password" name="password" required>
-            <button type="submit" class="btn" onclick="handleLogin()">Login</button>
+            <button type="submit" class="btn">Login</button>
         </form>
+
         <p class="signup-link">
             Belum punya akun? 
             <a href="#" onclick="navtoregmember()">Sign up</a>
         </p>
-        <script>
-            function navtoregmember() {
-                window.location.href = "/member/registrasimember";
-            }
-    
-            function handleLogin() {
-                window.location.href = "/member";
-                console.log("Login attempted.");
-            }
-        </script>
     </div>
-    
 
+    <script>
+        // Display success message from query parameter
+        const params = new URLSearchParams(window.location.search);
+        const message = params.get('message');
+        const error = params.get('error');
+
+        if (message) {
+            document.getElementById('success-message').textContent = message;
+        }
+
+        if (error) {
+            document.getElementById('error-message').textContent = error;
+        }
+
+        // Redirect to the registration page
+        function navtoregmember() {
+            window.location.href = "/member/registrasimember";
+        }
+    </script>
 </body>
 </html>

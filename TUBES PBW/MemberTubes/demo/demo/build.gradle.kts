@@ -24,9 +24,12 @@ repositories {
 }
 
 dependencies {
+implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0")
 	compileOnly("org.projectlombok:lombok")
+	runtimeOnly("org.postgresql:postgresql")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
