@@ -15,6 +15,11 @@ public class MemberController {
 
     @Autowired
     private MemberRepository memberRepository;
+    
+   @GetMapping("/member/loginmember")
+    public String showLogInMember(Model model){
+        return "LoginMember";
+    }
 
     /**
      * Menampilkan halaman MemberAddArtist.html sebagai halaman utama
@@ -80,7 +85,6 @@ public class MemberController {
     public String logout(HttpSession session) {
         // Hapus data sesi jika ada
         session.invalidate();
-
         // Redirect ke halaman login
         return "redirect:/member/loginmember";
     }
