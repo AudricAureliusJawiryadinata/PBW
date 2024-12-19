@@ -17,27 +17,43 @@ public class MemberController {
     private MemberRepository memberRepository;
 
     /**
-     * Menampilkan halaman Member.html
+     * Menampilkan halaman MemberAddArtist.html sebagai halaman utama
      */
-    @GetMapping("/member")
-    public String showMemberPage(Model model) {
-        return "Member"; // Mengarahkan ke Member.html
+    @GetMapping("/MemberAddArtist")
+    public String showMemberAddArtistPage(Model model) {
+        return "MemberAddArtist"; // Mengarahkan ke MemberAddArtist.html
     }
 
     /**
-     * Menampilkan halaman LoginMember.html
+     * Menampilkan halaman MemberAddShow.html
      */
-    @GetMapping("/member/loginmember")
-    public String showLogInMember(Model model) {
-        return "LoginMember"; // Mengarahkan ke LoginMember.html
+    @GetMapping("/MemberAddShow")
+    public String showMemberAddShowPage() {
+        return "MemberAddShow"; // Mengarahkan ke MemberAddShow.html
     }
 
     /**
-     * Menampilkan halaman RegistrasiMember.html
+     * Menampilkan halaman MemberAddSetlist.html
      */
-    @GetMapping("/member/registrasimember")
-    public String showSignUpMember(Model model) {
-        return "RegistrasiMember"; // Mengarahkan ke RegistrasiMember.html
+    @GetMapping("/MemberAddSetlist")
+    public String showMemberAddSetlistPage() {
+        return "MemberAddSetlist"; // Mengarahkan ke MemberAddSetlist.html
+    }
+
+    /**
+     * Menampilkan halaman MemberKomentar.html
+     */
+    @GetMapping("/MemberKomentar")
+    public String showMemberKomentarPage() {
+        return "MemberKomentar"; // Mengarahkan ke MemberKomentar.html
+    }
+
+    /**
+     * Menampilkan halaman MemberHistory.html
+     */
+    @GetMapping("/MemberHistory")
+    public String showMemberHistoryPage() {
+        return "MemberHistory"; // Mengarahkan ke MemberHistory.html
     }
 
     /**
@@ -49,13 +65,17 @@ public class MemberController {
                               RedirectAttributes redirectAttributes) {
         // Validasi username dan password menggunakan repository
         if (memberRepository.isValidUser(username, password)) {
-            return "redirect:/member"; // Jika valid, arahkan ke halaman Member.html
+            return "redirect:/MemberAddArtist"; // Jika valid, arahkan ke halaman MemberAddArtist.html
         }
-    
+
         // Jika tidak valid, tambahkan pesan error sebagai query parameter
         redirectAttributes.addAttribute("error", "Username atau password salah.");
         return "redirect:/member/loginmember"; // Redirect ke halaman login yang benar
     }
+
+    /**
+     * Logout dan hapus sesi pengguna
+     */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // Hapus data sesi jika ada
@@ -64,8 +84,19 @@ public class MemberController {
         // Redirect ke halaman login
         return "redirect:/member/loginmember";
     }
-
     
-
+    @PostMapping("/add-artist")
+    public String addArtist(@RequestParam("namaArtis") String namaArtis,
+                            @RequestParam("genreMusik") String genreMusik,
+                            RedirectAttributes redirectAttributes) {
+        try {
+            memberRepository.addArtist(namaArtis, genreMusik); // Simpan artis ke database
+            redirectAttributes.addFlashAttribute("successMessage", "Artis berhasil ditambahkan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan artis: " + e.getMessage());
+        }
+        return "redirect:/MemberAddArtist"; // Kembali ke halaman form
+    }
     
 }
+

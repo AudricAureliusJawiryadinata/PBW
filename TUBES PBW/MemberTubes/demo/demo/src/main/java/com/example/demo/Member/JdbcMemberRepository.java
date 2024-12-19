@@ -6,12 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
 public class JdbcMemberRepository implements MemberRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
 
     @Override
     public List<Member> findAll() {
@@ -79,4 +83,8 @@ public class JdbcMemberRepository implements MemberRepository {
             resultSet.getString("password")
         );
     }
+    public void addArtist(String namaArtis, String genreMusik) {
+        String sql = "INSERT INTO artis (nama_artis, genre_musik) VALUES (?, ?)";
+        jdbcTemplate.update(sql, namaArtis, genreMusik);
+    }    
 }

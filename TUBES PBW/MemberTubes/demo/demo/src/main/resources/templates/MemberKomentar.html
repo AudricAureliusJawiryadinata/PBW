@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komentar & Koreksi - SetList Konser</title>
+    <link rel="stylesheet" href="/Member/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Fitur Member</h2>
+            <ul>
+                <li><a href="/MemberAddArtist">Tambah Artis</a></li>
+                <li><a href="/MemberAddShow">Tambah Show</a></li>
+                <li><a href="/MemberAddSetlist">Tambah Setlist</a></li>
+                <li><a href="/MemberKomentar">Komentar & Koreksi</a></li>
+                <li><a href="/MemberHistory">History Perubahan</a></li>
+            </ul>
+            <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
+        </aside>
+        <main class="content">
+        <h1>Komentar & Koreksi</h1>
+        <form action="/member/comment" method="post">
+            <label for="comment">Komentar atau Koreksi:</label>
+            <textarea id="comment" name="commentText" placeholder="Tulis komentar atau koreksi..." required></textarea>
+            
+            <button type="submit" class="btn">Kirim Komentar</button>
+        </form>
+    </main>
+    </div>
+</body>
+</html>

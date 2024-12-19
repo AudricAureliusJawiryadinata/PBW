@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Show - SetList Konser</title>
+    <link rel="stylesheet" href="/Member/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Fitur Member</h2>
+            <ul>
+                <li><a href="/MemberAddArtist">Tambah Artis</a></li>
+                <li><a href="/MemberAddShow">Tambah Show</a></li>
+                <li><a href="/MemberAddSetlist">Tambah Setlist</a></li>
+                <li><a href="/MemberKomentar">Komentar & Koreksi</a></li>
+                <li><a href="/MemberHistory">History Perubahan</a></li>
+            </ul>
+            <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
+        </aside>
+        <main class="content">
+        <h1>Tambah Show</h1>
+        <form action="/member/add-show" method="post">
+            <label for="show-name">Nama Show:</label>
+            <input type="text" id="show-name" name="showName" placeholder="Masukkan nama show" required>
+            
+            <label for="show-date">Tanggal Show:</label>
+            <input type="date" id="show-date" name="showDate" required>
+            
+            <label for="show-location">Lokasi Show:</label>
+            <input type="text" id="show-location" name="showLocation" placeholder="Masukkan lokasi show" required>
+            
+            <button type="submit" class="btn">Tambah Show</button>
+        </form>
+    </main>
+    </div>
+</body>
+</html>
