@@ -60,6 +60,10 @@ public class JdbcAdminRepository implements AdminRepository {
         return count != null && count > 0;
     }
     
+    public void addArtist(String namaArtis, String genreMusik) {
+        String sql = "INSERT INTO artis (nama_artis, genre_musik) VALUES (?, ?)";
+        jdbcTemplate.update(sql, namaArtis, genreMusik);
+    }
 
     private Admin mapRowToAdmin(ResultSet resultSet, int rowNum) throws SQLException {
         return new Admin(

@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.demo.Member.Member; // Impor kelas Member
 import com.example.demo.Member.MemberRepository; // Impor MemberRepository
 
@@ -30,6 +32,20 @@ public class AdminController {
         return "AddArtist"; // Harus sesuai dengan add-artist.html
     }
 
+    @PostMapping("/admin/add-artist")
+    public String addArtist(@RequestParam("namaArtis") String namaArtis,
+                            @RequestParam("genreMusik") String genreMusik,
+                            RedirectAttributes redirectAttributes) {
+        try {
+            adminRepository.addArtist(namaArtis, genreMusik); // Simpan artis ke database
+            redirectAttributes.addFlashAttribute("successMessage", "Artis berhasil ditambahkan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan artis: " + e.getMessage());
+        }
+        return "redirect:/admin/AddArtist"; // Kembali ke halaman form
+    }
+    
+    
     @GetMapping("/admin/AddShow")
     public String showAddShowPage(Model model) {
         model.addAttribute("pageTitle", "Tambah Show");
@@ -66,6 +82,5 @@ public class AdminController {
         model.addAttribute("error", "Username atau password salah!");
         return "LoginAdmin"; // Kembali ke halaman login jika gagal
     }
-
-
+    
 }

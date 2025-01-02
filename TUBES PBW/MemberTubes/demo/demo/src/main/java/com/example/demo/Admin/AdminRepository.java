@@ -10,4 +10,5 @@ public interface AdminRepository {
     void update(int id, Admin updatedAdmin); // Memperbarui admin berdasarkan ID
     void delete(int id); // Menghapus admin berdasarkan ID
     boolean isValidAdmin(String username, String password); // Validasi username dan password
+    void addArtist(String namaArtis, String genreMusik); // Menyimpan data artis
 }
