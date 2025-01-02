@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Show</title>
+    <link rel="stylesheet" href="adminstyles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <h2>Dashboard Admin</h2>
+            <ul>
+                <li><a href="/admin/addArtist">Tambah Artis</a></li>
+                <li><a href="/admin/addShow">Tambah Show</a></li>
+                <li><a href="/admin/addSetlist">Tambah Setlist</a></li>
+                <li><a href="/admin/report">Laporan</a></li>
+            </ul>
+        </aside>
+        <main class="content">
+            <h1>Tambah Show</h1>
+            <section class="feature-section">
+                <h2>Form Tambah Show</h2>
+                <form action="/admin/addShow" method="post">
+                    <label for="name">Nama Show:</label>
+                    <input type="text" id="name" name="name" placeholder="Masukkan nama show" required>
+                    <label for="artistId">Pilih Artis:</label>
+                    <select id="artistId" name="artistId">
+                        <!-- Option dengan data dinamis -->
+                        <option value="1">Artis A</option>
+                        <option value="2">Artis B</option>
+                    </select>
+                    <button class="btn" type="submit">Tambah</button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

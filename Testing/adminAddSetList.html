@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Setlist</title>
+    <link rel="stylesheet" href="adminstyles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <h2>Dashboard Admin</h2>
+            <ul>
+                <li><a href="/admin/addArtist">Tambah Artis</a></li>
+                <li><a href="/admin/addShow">Tambah Show</a></li>
+                <li><a href="/admin/addSetlist">Tambah Setlist</a></li>
+                <li><a href="/admin/report">Laporan</a></li>
+            </ul>
+        </aside>
+        <main class="content">
+            <h1>Tambah Setlist</h1>
+            <section class="feature-section">
+                <h2>Form Tambah Setlist</h2>
+                <form action="/admin/addSetlist" method="post">
+                    <label for="showId">Pilih Show:</label>
+                    <select id="showId" name="showId">
+                        <!-- Option dengan data dinamis -->
+                        <option value="1">Show A</option>
+                        <option value="2">Show B</option>
+                    </select>
+                    <label for="songs">Daftar Lagu:</label>
+                    <textarea id="songs" name="songs" rows="5" placeholder="Masukkan daftar lagu" required></textarea>
+                    <label for="proofUrl">URL Bukti:</label>
+                    <input type="url" id="proofUrl" name="proofUrl" placeholder="Masukkan URL bukti">
+                    <button class="btn" type="submit">Tambah</button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
