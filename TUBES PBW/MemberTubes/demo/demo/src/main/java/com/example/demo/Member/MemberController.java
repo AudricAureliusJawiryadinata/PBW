@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.demo.SetListRepository;
+
 import java.util.List; // Tambahkan ini!
 
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +20,8 @@ public class MemberController {
 
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private SetListRepository setListRepository;
     
    @GetMapping("/member/loginmember")
     public String showLogInMember(Model model){
@@ -43,10 +48,26 @@ public class MemberController {
      * Menampilkan halaman MemberAddSetlist.html
      */
     @GetMapping("/MemberAddSetlist")
-    public String showMemberAddSetlistPage() {
-        return "MemberAddSetlist"; // Mengarahkan ke MemberAddSetlist.html
+    public String showMemberAddSetlistPage(Model model) {
+        // Menambahkan data show untuk dropdown
+        model.addAttribute("shows", setListRepository.findAllShows());
+        return "MemberAddSetlist"; // Halaman HTML untuk Member
     }
-
+  
+    @PostMapping("/member/add-setlist")
+    public String addSetlist(@RequestParam("setlistName") String namaLagu,
+                             @RequestParam("showId") int showId,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            String showTerkait = setListRepository.getShowNameById(showId); // Ambil nama show
+            setListRepository.addSetlist(namaLagu, showTerkait, showId); // Simpan ke database
+            redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil ditambahkan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan setlist: " + e.getMessage());
+        }
+        return "redirect:/MemberAddSetlist"; // Kembali ke
+    }
+    
     /**
      * Menampilkan halaman MemberKomentar.html
      */

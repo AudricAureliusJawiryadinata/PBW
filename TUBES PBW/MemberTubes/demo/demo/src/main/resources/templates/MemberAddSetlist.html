@@ -5,6 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Setlist - SetList Konser</title>
     <link rel="stylesheet" href="/Member/styles.css">
+    <script>
+        // JavaScript untuk menampilkan pop-up
+            function showAlert(message, type) {
+                const alertBox = document.createElement('div');
+                alertBox.className = `alert ${type}`;
+                alertBox.textContent = message;
+                document.body.appendChild(alertBox);
+    
+                // Hapus pop-up setelah 3 detik
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 3000);
+            }
+        </script>
+        <style>
+            /* Gaya untuk pop-up */
+            .alert {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px;
+                border-radius: 5px;
+                color: white;
+                font-size: 16px;
+                z-index: 1000;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            }
+            .alert.success {
+                background-color: #28a745; /* Hijau untuk keberhasilan */
+            }
+            .alert.error {
+                background-color: #dc3545; /* Merah untuk kesalahan */
+            }
+        </style>
 </head>
 <body>
     <div class="wrapper">
@@ -29,13 +63,19 @@
             
             <label for="setlist-show">Show Terkait:</label>
             <select id="setlist-show" name="showId" required>
-                <option value="show1">Show 1</option>
-                <option value="show2">Show 2</option>
+                <option th:each="show : ${shows}" th:value="${show.id}" th:text="${show.namaShow}"></option>
             </select>
             
             <button type="submit" class="btn">Tambah Setlist</button>
         </form>
+        
     </main>
     </div>
+        <!-- Thymeleaf Script -->
+        <script th:inline="javascript">
+            /* Jika ada pesan sukses, tampilkan pop-up */
+            [[${successMessage}]] ? showAlert('[[${successMessage}]]', 'success') : '';
+            [[${errorMessage}]] ? showAlert('[[${errorMessage}]]', 'error') : '';
+        </script>
 </body>
 </html>

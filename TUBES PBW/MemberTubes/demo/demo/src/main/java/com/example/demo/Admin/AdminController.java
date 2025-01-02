@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.SetListRepository;
 import com.example.demo.Member.Member; // Impor kelas Member
 import com.example.demo.Member.MemberRepository; // Impor MemberRepository
 
@@ -18,9 +19,9 @@ import com.example.demo.Member.MemberRepository; // Impor MemberRepository
 public class AdminController {
     @Autowired
     private AdminRepository adminRepository;
+
     @Autowired
     private MemberRepository memberRepository;
-
 
     @GetMapping("/admin/loginAdmin")
     public String showLogInAdmin(Model model) {
@@ -54,10 +55,26 @@ public class AdminController {
 
     @GetMapping("/admin/AddSetList")
     public String showAddSetlistPage(Model model) {
-        model.addAttribute("pageTitle", "Tambah Setlist");
+        model.addAttribute("shows", setListRepository.findAllShows());  // Pass shows to the view
         return "AddSetList"; // Harus sesuai dengan add-setlist.html
     }
-
+    @Autowired
+    private SetListRepository setListRepository; // Correctly autowiring the repository
+    
+    @PostMapping("/admin/add-setlist")
+    public String addSetlist(@RequestParam("setlistName") String namaLagu,
+                             @RequestParam("showId") int showId,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            String showTerkait = setListRepository.getShowNameById(showId); // Correct call
+            setListRepository.addSetlist(namaLagu, showTerkait, showId); // Correct call
+            redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil ditambahkan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan setlist: " + e.getMessage());
+        }
+        return "redirect:/admin/AddSetList"; // Redirect to the same page
+    }
+    
     @GetMapping("/admin/ManageUser")
     public String showManageUsersPage(Model model) {
         List<Member> members = memberRepository.findAll(); // Ambil data member
