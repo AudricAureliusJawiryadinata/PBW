@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.JdbcSetlistRepository;
 import com.example.demo.SetListRepository;
+import com.example.demo.Show;
 import com.example.demo.ShowRepository;
 
 import java.util.List; // Tambahkan ini!
@@ -22,7 +24,8 @@ public class MemberController {
     private MemberRepository memberRepository;
     @Autowired
     private SetListRepository setListRepository;
-    
+    @Autowired
+    private JdbcSetlistRepository setlistRepository;
    @GetMapping("/member/loginmember")
     public String showLogInMember(Model model){
         return "LoginMember";
@@ -85,10 +88,27 @@ public class MemberController {
      * Menampilkan halaman MemberKomentar.html
      */
     @GetMapping("/MemberKomentar")
-    public String showMemberKomentarPage() {
-        return "MemberKomentar"; // Mengarahkan ke MemberKomentar.html
+    public String showMemberKomentarPage(Model model) {
+        // Fetch all shows
+        List<Show> shows = setlistRepository.findAllShows();
+        // Add shows to model
+        model.addAttribute("shows", shows);
+        return "MemberKomentar"; // The page where you want to show the dropdown
     }
+    @Autowired
+    private CommentRepository commentRepository;
 
+    @PostMapping("/member/comment")
+    public String submitComment(@RequestParam String commentText, @RequestParam int showId, RedirectAttributes redirectAttributes) {
+        // Save the comment
+        commentRepository.addComment(commentText, showId);
+
+        // Add success message
+        redirectAttributes.addFlashAttribute("successMessage", "Komentar berhasil dikirim!");
+
+        // Redirect to the same page
+        return "redirect:/MemberKomentar?showId=" + showId;
+    }
     /**
      * Menampilkan halaman MemberHistory.html
      */

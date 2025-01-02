@@ -26,6 +26,12 @@ public class JdbcShowRepository implements ShowRepository {
         return jdbcTemplate.query(sql, this::mapRowToShow);
     }
 
+    @Override
+    public Show findShowById(int showId) {
+        String sql = "SELECT * FROM show WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, this::mapRowToShow, showId);
+    }
+
     private Show mapRowToShow(ResultSet resultSet, int rowNum) throws SQLException {
         return new Show(
                 resultSet.getInt("id"),
