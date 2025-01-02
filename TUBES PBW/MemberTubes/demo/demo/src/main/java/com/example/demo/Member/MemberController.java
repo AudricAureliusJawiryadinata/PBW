@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List; // Tambahkan ini!
 
 import jakarta.servlet.http.HttpSession;
 
@@ -101,6 +103,51 @@ public class MemberController {
         }
         return "redirect:/MemberAddArtist"; // Kembali ke halaman form
     }
+
+    @GetMapping("/member/registrasimember")
+        public String showSignUpMember(Model model) {
+            return "RegistrasiMember"; // Mengarahkan ke RegistrasiMember.html
+        }
+
+        
+    // Tampilkan semua pengguna atau hasil pencarian
+    @PostMapping("/admin/ManageUser")
+    public String searchUsers(@RequestParam(required = false) String keyword, Model model) {
+        List<Member> members;
+        if (keyword != null && !keyword.isEmpty()) {
+            members = memberRepository.findByName(keyword); // Pencarian berdasarkan keyword
+        } else {
+            members = memberRepository.findAll(); // Ambil semua pengguna
+        }
+        model.addAttribute("members", members);
+        return "ManageUser"; // Nama file HTML
+    }
+
+    // Edit password pengguna
+    @PostMapping("/admin/ManageUser/edit")
+    public String editPassword(@RequestParam int id, @RequestParam String password, RedirectAttributes redirectAttributes) {
+        Member member = memberRepository.findById(id);
+        if (member != null) {
+            // Pastikan data yang tidak diubah tetap sama
+            member.setPassword(password); // Ubah hanya password
+            memberRepository.update(id, member);
+            redirectAttributes.addFlashAttribute("message", "Password berhasil diperbarui.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Pengguna tidak ditemukan.");
+        }
+        return "redirect:/admin/ManageUser";
+    }
     
+    
+
+
+    // Hapus pengguna
+    @PostMapping("/admin/ManageUser/delete")
+    public String deleteUser(@RequestParam int id, RedirectAttributes redirectAttributes) {
+        memberRepository.delete(id);
+        redirectAttributes.addFlashAttribute("message", "Pengguna berhasil dihapus.");
+        return "redirect:/admin/ManageUser";
+    }
+
 }
 

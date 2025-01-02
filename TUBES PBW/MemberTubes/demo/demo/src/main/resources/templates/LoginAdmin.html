@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Member</title>
-    <link rel="stylesheet" href="/LogInAdmin/assest/LoginMemberStyles.css">
+    <title>Login Admin</title>
+    <link rel="stylesheet" href="/LogInAdmin/assets/LoginAdminStyles.css">
 </head>
 <body>
 
     <div class="login-container">
         <h2>Login Admin</h2>
-        <form action="/login" method="post">
+        <form action="/admin/loginAdmin" method="post">
             <input type="text" class="input-field" placeholder="Username" name="username" required>
             <input type="password" class="input-field" placeholder="Password" name="password" required>
             <button type="submit" class="btn">Login</button>
         </form>
+
+        <!-- Tempat untuk menampilkan pesan error -->
+        <div class="error-message" th:if="${error}">
+            <p th:text="${error}"></p>
+        </div>
     </div>
 
 </body>

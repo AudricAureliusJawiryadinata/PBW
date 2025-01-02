@@ -18,24 +18,51 @@
                 <li><a href="/admin/ManageUser">Kelola Pengguna</a></li>
                 <li><a href="/admin/Report">Laporan</a></li>
             </ul>
+            <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
 
         <!-- Konten Utama -->
         <main class="content">
             <h1>Kelola Pengguna</h1>
-    <form>
-        <label for="user-search">Cari Pengguna:</label>
-        <input type="text" id="user-search" placeholder="Masukkan nama atau email pengguna">
-        <button type="submit" class="btn">Cari</button>
-    </form>
-    <ul class="user-list">
-        <li>
-            <p><strong>Username:</strong> user123</p>
-            <button class="btn">Hapus</button>
-            <button class="btn">Edit</button>
-        </li>
-        <!-- Tambahkan pengguna lainnya di sini -->
-    </ul>
+
+            <!-- Form Pencarian Pengguna -->
+            <form action="/admin/ManageUser" method="post">
+                <label for="user-search">Cari Pengguna:</label>
+                <input type="text" id="user-search" name="keyword" placeholder="Masukkan nama atau email pengguna">
+                <button type="submit" class="btn">Cari</button>
+            </form>
+
+            <!-- Tabel Pengguna -->
+            <table class="user-table" border="1">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Password Baru</th>
+                        <th>Hapus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop untuk menampilkan data pengguna -->
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member.username}"></td>
+                        <td th:text="${member.password}"></td> <!-- Tampilkan email -->
+                        <td>
+                            <form action="/admin/ManageUser/edit" method="post" style="display: inline;">
+                                <input type="hidden" name="id" th:value="${member.id}">
+                                <input type="password" name="password" placeholder="Masukkan password baru">
+                                <button type="submit" class="btn">Edit</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/admin/ManageUser/delete" method="post" style="display: inline;">
+                                <input type="hidden" name="id" th:value="${member.id}">
+                                <button type="submit" class="btn">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </main>
     </div>
 </body>

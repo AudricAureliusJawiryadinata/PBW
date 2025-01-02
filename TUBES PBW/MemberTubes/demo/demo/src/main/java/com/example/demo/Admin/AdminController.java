@@ -1,18 +1,25 @@
 package com.example.demo.Admin;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.example.demo.Member.Member; // Impor kelas Member
+import com.example.demo.Member.MemberRepository; // Impor MemberRepository
 
 @Controller
-public class AdminController {
 
-    @GetMapping("/admin")
-    public String showAdminDashboard(Model model) {
-        // Tambahkan data ke model jika diperlukan
-        model.addAttribute("pageTitle", "Dashboard Admin");
-        return "admin"; // Harus sesuai dengan nama file HTML tanpa ekstensi (e.g., admin.html)
-    }
+public class AdminController {
+    @Autowired
+    private AdminRepository adminRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+
+
     @GetMapping("/admin/loginAdmin")
     public String showLogInAdmin(Model model) {
         return "LoginAdmin";
@@ -37,8 +44,10 @@ public class AdminController {
 
     @GetMapping("/admin/ManageUser")
     public String showManageUsersPage(Model model) {
+        List<Member> members = memberRepository.findAll(); // Ambil data member
+        model.addAttribute("members", members);
         model.addAttribute("pageTitle", "Kelola Pengguna");
-        return "ManageUser"; // Harus sesuai dengan manage-users.html
+        return "ManageUser";
     }
 
     @GetMapping("/admin/Report")
@@ -46,4 +55,17 @@ public class AdminController {
         model.addAttribute("pageTitle", "Laporan");
         return "Report"; // Harus sesuai dengan generate-report.html
     }
+    @PostMapping("/admin/loginAdmin")
+    public String handleAdminLogin(@RequestParam String username, @RequestParam String password, Model model) {
+        // Gunakan metode isValidAdmin untuk memeriksa username dan password di database
+        if (adminRepository.isValidAdmin(username, password)) {
+            return "redirect:/admin/AddArtist"; // Login berhasil
+        }
+
+        // Jika login gagal, tambahkan pesan error ke model
+        model.addAttribute("error", "Username atau password salah!");
+        return "LoginAdmin"; // Kembali ke halaman login jika gagal
+    }
+
+
 }
