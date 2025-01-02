@@ -3,6 +3,7 @@ select * from member
 select * from admin
 select * from setlist
 select * from show
+select * from comments
 
 DROP TABLE IF EXISTS member;
 DROP TABLE IF EXISTS artis;
@@ -33,23 +34,32 @@ CREATE TABLE show (
     nama_show VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE setlist (
-    id SERIAL PRIMARY KEY,
-    nama_lagu VARCHAR(100) NOT NULL,
-	show_terkait VARCHAR(100) NOT NULL,
-    show_id INT NOT NULL,
-    FOREIGN KEY (show_id) REFERENCES show (id)
-);
-
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,      -- Foreign key referencing users
-    show_id INT NOT NULL,      -- Foreign key referencing show
-    comment_text TEXT NOT NULL,  -- The comment text
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the comment was made
+    user_id INT NOT NULL,     -- Foreign key referencing member
+    show_id INT NOT NULL,     -- Foreign key referencing show
+    comment_text TEXT NOT NULL,  -- The actual comment text
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the comment was created
     FOREIGN KEY (user_id) REFERENCES member(id),
     FOREIGN KEY (show_id) REFERENCES show(id)
 );
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,             -- Unique ID for each comment
+    show_id INT NOT NULL,              -- Foreign key referencing show
+    comment_text TEXT NOT NULL,        -- The comment text
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp when the comment was made
+    FOREIGN KEY (show_id) REFERENCES show(id)  -- Link to the 'show' table
+);
+
+-- Example INSERTS
+INSERT INTO comments (show_id, comment_text)
+VALUES
+    (1, 'Amazing show, loved it!'),
+    (2, 'Not bad, but could be better.'),
+    (1, 'The performances were great!'),
+    (2, 'Enjoyed the concert a lot!');
+
 
 
 
