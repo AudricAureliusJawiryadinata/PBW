@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.SetListRepository;
+import com.example.demo.ShowRepository;
 import com.example.demo.Member.Member; // Impor kelas Member
 import com.example.demo.Member.MemberRepository; // Impor MemberRepository
 
@@ -51,6 +52,18 @@ public class AdminController {
     public String showAddShowPage(Model model) {
         model.addAttribute("pageTitle", "Tambah Show");
         return "AddShow"; // Harus sesuai dengan add-show.html
+    }
+    @Autowired
+    private ShowRepository showRepository;
+    @PostMapping("/admin/add-show")
+    public String addShow(@RequestParam("showName") String namaShow, RedirectAttributes redirectAttributes) {
+        try {
+            showRepository.addShow(namaShow);
+            redirectAttributes.addFlashAttribute("successMessage", "Show berhasil ditambahkan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan show: " + e.getMessage());
+        }
+        return "redirect:/admin/AddShow"; // Redirect back to the AddShow page
     }
 
     @GetMapping("/admin/AddSetList")

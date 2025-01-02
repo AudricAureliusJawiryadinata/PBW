@@ -5,11 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.SetListRepository;
+import com.example.demo.ShowRepository;
 
 import java.util.List; // Tambahkan ini!
 
@@ -40,8 +40,21 @@ public class MemberController {
      * Menampilkan halaman MemberAddShow.html
      */
     @GetMapping("/MemberAddShow")
-    public String showMemberAddShowPage() {
-        return "MemberAddShow"; // Mengarahkan ke MemberAddShow.html
+    public String showMemberAddShowPage(Model model) {
+        model.addAttribute("pageTitle", "Tambah Show");
+        return "MemberAddShow"; // The view name to show Member Add Show form
+    }
+    @Autowired
+    private ShowRepository showRepository;
+    @PostMapping("/member/add-show")
+    public String addShow(@RequestParam("showName") String namaShow, RedirectAttributes redirectAttributes) {
+        try {
+            showRepository.addShow(namaShow);
+            redirectAttributes.addFlashAttribute("successMessage", "Show berhasil ditambahkan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan show: " + e.getMessage());
+        }
+        return "redirect:/MemberAddShow"; // Redirect back to the Member Add Show page
     }
 
     /**
