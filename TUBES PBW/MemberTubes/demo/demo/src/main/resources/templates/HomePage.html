@@ -30,21 +30,39 @@
     <section id="portfolio" class="section">
         <h2>MASUK SEBAGAI </h2>
         <div class="portfolio-gallery">
-            <div class="portfolio-item">
+            <!-- GUEST -->
+            <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateToGuest()">
                 <div class="portfolio-icon">🎤</div>
                 <h3>GUEST</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
             </div>
-            <div class="portfolio-item">
+            <script>
+                function navigateToGuest() {
+                  window.location.href = "http://localhost:8080/guest";
+                }
+              </script>
+            <!-- MEMBER -->
+            <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateTologin()">
                 <div class="portfolio-icon">🎵</div>
                 <h3>MEMBER</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
             </div>
-            <div class="portfolio-item">
+              <script>
+                function navigateTologin() {
+                  window.location.href = "http://localhost:8080/loginMember";
+                }
+              </script>
+              <!-- ADMIN -->
+            <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateToLoginAdmin()">
                 <div class="portfolio-icon">🎭</div>
                 <h3>ADMIN</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
             </div>
+            <script>
+                function navigateToLoginAdmin() {
+                  window.location.href = "http://localhost:8080/loginAdmin";
+                }
+              </script>
         </div>
     </section>
 
