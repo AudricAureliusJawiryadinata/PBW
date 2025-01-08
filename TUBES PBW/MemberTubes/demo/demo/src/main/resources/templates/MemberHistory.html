@@ -21,15 +21,14 @@
             <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
         <main class="content">
-        <h1>History Perubahan</h1>
-        <ul>
-            <li>
-                <p><strong>2024-12-01</strong>: Artis "A" ditambahkan oleh user123</p>
-            </li>
-            <!-- History lainnya bisa ditambahkan di sini -->
-        </ul>
-    </main>
+            <h1>History Perubahan</h1>
+            <ul>
+                <!-- Loop to display change history -->
+                <li th:each="history : ${historyList}">
+                    <p><strong th:text="${history.createdAt}"></strong>: <span th:text="${history.description}"></span></p>
+                </li>
+            </ul>
+        </main>
     </div>
-    
 </body>
 </html>
