@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS show;
 DROP TABLE IF EXISTS setlist;
 DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS change_history;
 
 CREATE TABLE member (
     id SERIAL PRIMARY KEY,
@@ -34,14 +35,12 @@ CREATE TABLE show (
     nama_show VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE comments (
+CREATE TABLE setlist (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,     -- Foreign key referencing member
-    show_id INT NOT NULL,     -- Foreign key referencing show
-    comment_text TEXT NOT NULL,  -- The actual comment text
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the comment was created
-    FOREIGN KEY (user_id) REFERENCES member(id),
-    FOREIGN KEY (show_id) REFERENCES show(id)
+    nama_lagu VARCHAR(100) NOT NULL,
+    show_terkait VARCHAR(100) NOT NULL,
+    show_id INT NOT NULL,
+    FOREIGN KEY (show_id) REFERENCES show (id)
 );
 
 CREATE TABLE comments (
@@ -51,6 +50,19 @@ CREATE TABLE comments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp when the comment was made
     FOREIGN KEY (show_id) REFERENCES show(id)  -- Link to the 'show' table
 );
+
+CREATE TABLE change_history (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    action_type VARCHAR(50) NOT NULL,
+    entity_type VARCHAR(50) NOT NULL,
+    entity_id INT,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES member(id)
+);
+
+
 
 -- Example INSERTS
 INSERT INTO comments (show_id, comment_text)
