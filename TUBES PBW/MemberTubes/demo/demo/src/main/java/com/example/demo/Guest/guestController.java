@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Guest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,4 +10,5 @@ public class guestController {
     public String showMemberPage(Model model) {
         return "Guest";
     }
+
 }

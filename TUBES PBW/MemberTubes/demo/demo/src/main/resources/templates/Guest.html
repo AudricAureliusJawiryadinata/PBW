@@ -60,7 +60,14 @@
                     <div class="artist-info">
                         <h3>Coldplay</h3>
                         <p>Alternative Rock</p>
-                        <button class="btn btn-view-setlists">Lihat Setlist</button>
+                        <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateToSetList()">
+                            <button class="btn btn-view-setlists" data-artist="coldplay">Lihat Setlist</button>
+                        </div>
+                        <script>
+                            function navigateToSetList() {
+                              window.location.href = "http://localhost:8080/setListArtist";
+                            }
+                        </script>
                     </div>
                 </div>
                 <div class="artist-card">
@@ -68,7 +75,7 @@
                     <div class="artist-info">
                         <h3>Ed Sheeran</h3>
                         <p>Pop</p>
-                        <button class="btn btn-view-setlists">Lihat Setlist</button>
+                        <button class="btn btn-view-setlists" data-artist="edsheeran">Lihat Setlist</button>
                     </div>
                 </div>
                 <div class="artist-card">
@@ -76,7 +83,7 @@
                     <div class="artist-info">
                         <h3>Taylor Swift</h3>
                         <p>Pop</p>
-                        <button class="btn btn-view-setlists">Lihat Setlist</button>
+                        <button class="btn btn-view-setlists" data-artist="taylorswift">Lihat Setlist</button>
                     </div>
                 </div>
                 <div class="artist-card">
@@ -84,11 +91,12 @@
                     <div class="artist-info">
                         <h3>Bruno Mars</h3>
                         <p>R&B</p>
-                        <button class="btn btn-view-setlists">Lihat Setlist</button>
+                        <button class="btn btn-view-setlists" data-artist="brunomars">Lihat Setlist</button>
                     </div>
                 </div>
             </div>
         </section>
+        <div id="setlist-display"></div>
         <!-- Footer -->
         <footer class="site-footer">
             <div class="footer-content">
