@@ -22,13 +22,18 @@ public class JdbcMemberRepository implements MemberRepository {
     @Override
     public Member findById(int id) {
         String sql = "SELECT * FROM member WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, this::mapRowToMember, id);
+        try {
+            return jdbcTemplate.queryForObject(sql, this::mapRowToMember, id);
+        } catch (Exception e) {
+            return null; // Return null jika ID tidak ditemukan
+        }
     }
 
+    // Cari pengguna berdasarkan nama
     @Override
-    public List<Member> findByName(String username) {
-        String sql = "SELECT * FROM member WHERE username ILIKE ?";
-        return jdbcTemplate.query(sql, this::mapRowToMember, "%" + username + "%");
+    public List<Member> findByName(String keyword) {
+        String sql = "SELECT * FROM member WHERE username ILIKE ? OR email ILIKE ?";
+        return jdbcTemplate.query(sql, this::mapRowToMember, "%" + keyword + "%", "%" + keyword + "%");
     }
 
     @Override
@@ -44,9 +49,10 @@ public class JdbcMemberRepository implements MemberRepository {
 
     @Override
     public void update(int id, Member updatedMember) {
-        String sql = "UPDATE member SET username = ?, email = ?, password = ? WHERE id = ?";
-        jdbcTemplate.update(sql, updatedMember.getUsername(), updatedMember.getEmail(), updatedMember.getPassword(), id);
+        String sql = "UPDATE member SET password = ? WHERE id = ?"; // Hanya ubah password
+        jdbcTemplate.update(sql, updatedMember.getPassword(), id);
     }
+    
 
     @Override
     public void delete(int id) {
@@ -54,29 +60,32 @@ public class JdbcMemberRepository implements MemberRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    // Cari berdasarkan username
     public Member findByUsername(String username) {
         String sql = "SELECT * FROM member WHERE username = ?";
         try {
             return jdbcTemplate.queryForObject(sql, this::mapRowToMember, username);
         } catch (Exception e) {
-            return null; // Jika tidak ditemukan, kembalikan null
+            return null; // Return null jika username tidak ditemukan
         }
     }
 
-    // Validasi username dan password
     public boolean isValidUser(String username, String password) {
         String sql = "SELECT COUNT(*) FROM member WHERE username = ? AND password = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username, password);
         return count != null && count > 0;
     }
 
+    public void addArtist(String namaArtis, String genreMusik) {
+        String sql = "INSERT INTO artis (nama_artis, genre_musik) VALUES (?, ?)";
+        jdbcTemplate.update(sql, namaArtis, genreMusik);
+    }
     private Member mapRowToMember(ResultSet resultSet, int rowNum) throws SQLException {
         return new Member(
-            resultSet.getInt("id"),
-            resultSet.getString("username"),
-            resultSet.getString("email"),
-            resultSet.getString("password")
+            resultSet.getInt("id"),                  // Ambil ID
+            resultSet.getString("username"),         // Ambil Username
+            resultSet.getString("email"),            // Pastikan ini menunjuk ke kolom 'email'
+            resultSet.getString("password")          // Ambil Password
         );
     }
+    
 }

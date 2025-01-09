@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setlist: [[${artist}]]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Guest/Setlist.css">
+</head>
+<body>
+    <!-- Navigasi -->
+    <nav id="navbar">
+        <div class="navbar-brand">SetList Konser</div>
+        <div class="navbar-menu">
+            <!-- Beranda -->
+            <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateToBeranda()">
+                <a> Beranda </a>
+            </div>
+            <script>
+                function navigateToBeranda() {
+                  window.location.href = "http://localhost:8080/guest#home";
+                }
+            </script>
+            <!-- Artis -->
+            <div class="Artist" style="cursor: pointer; color: inherit;" onclick="navigateToArtist()">
+                <a> Artis </a>
+            </div>
+            <script>
+                function navigateToArtist() {
+                  window.location.href = "http://localhost:8080/guest#artists";
+                }
+            </script>
+            <div class="shows" style="cursor: pointer; color: inherit;" onclick="navigateToKonser()">
+                <a> Konser </a>
+            </div>
+            <script>
+                function navigateToKonser() {
+                  window.location.href = "http://localhost:8080/guest#shows";
+                }
+            </script>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1 th:text="${artist} + ' Setlist'"></h1>
+        <p>Discover the ultimate setlist for your favorite artist!</p>
+    </div>
+    <!-- Main Content -->
+    <div class="container">
+        <section>
+            <h2 class="section-title">Setlist</h2>
+            <ul class="setlist">
+                <li th:each="song : ${setlist.songs}">
+                    <span class="song-title" th:text="${song.title}"></span>
+                    <span class="notes" th:text="${song.notes}"></span>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2 class="section-title">Albums</h2>
+            <ul class="albums">
+                <li th:each="album : ${albums}">
+                    <span th:text="${album.name}"></span>
+                    <span th:text="'(' + album.songCount + ' songs)'"></span>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2 class="section-title">Concert Timeline</h2>
+            <ul class="timeline">
+                <li th:each="concert : ${concertTimeline}">
+                    <div>
+                        <strong th:text="${concert.date}"></strong>
+                        <span th:text="${concert.venue}"></span>,
+                        <span th:text="${concert.city}"></span>
+                    </div>
+                    <span th:text="'Time: ' + ${concert.time}"></span>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 1rem; background: var(--primary-color); color: var(--white);">
+        <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
+        <p>Bersama Kami, Musik Selalu Hidup</p>
+    </footer>
+</body>
+</html>

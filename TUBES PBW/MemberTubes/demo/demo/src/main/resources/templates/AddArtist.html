@@ -4,7 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Artis</title>
-    <link rel="stylesheet" href="/Admin/styles.css">
+    <link rel="stylesheet" href="/Admin/styles.css"><script>
+        // JavaScript untuk menampilkan pop-up
+        function showAlert(message, type) {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert ${type}`;
+            alertBox.textContent = message;
+            document.body.appendChild(alertBox);
+
+            // Hapus pop-up setelah 3 detik
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
+        }
+    </script>
+    <style>
+        /* Gaya untuk pop-up */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            z-index: 1000;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .alert.success {
+            background-color: #28a745; /* Hijau untuk keberhasilan */
+        }
+        .alert.error {
+            background-color: #dc3545; /* Merah untuk kesalahan */
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -18,21 +51,29 @@
                 <li><a href="/admin/ManageUser">Kelola Pengguna</a></li>
                 <li><a href="/admin/Report">Laporan</a></li>
             </ul>
+            <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
 
         <!-- Konten Utama -->
         <main class="content">
             <h1>Tambah Artis</h1>
-            <form>
+            <form action="/admin/add-artist" method="post">
                 <label for="artist-name">Nama Artis:</label>
-                <input type="text" id="artist-name" placeholder="Masukkan nama artis">
+                <input type="text" id="artist-name" name="namaArtis" placeholder="Masukkan nama artis" required>
                 
                 <label for="artist-genre">Genre Musik:</label>
-                <input type="text" id="artist-genre" placeholder="Masukkan genre musik">
+                <input type="text" id="artist-genre" name="genreMusik" placeholder="Masukkan genre musik" required>
                 
                 <button type="submit" class="btn">Tambah Artis</button>
             </form>
+            
         </main>
-    </div>
+    </div>    
+    <!-- Thymeleaf Script -->
+    <script th:inline="javascript">
+        /* Jika ada pesan sukses, tampilkan pop-up */
+        [[${successMessage}]] ? showAlert('[[${successMessage}]]', 'success') : '';
+        [[${errorMessage}]] ? showAlert('[[${errorMessage}]]', 'error') : '';
+    </script>
 </body>
 </html>
