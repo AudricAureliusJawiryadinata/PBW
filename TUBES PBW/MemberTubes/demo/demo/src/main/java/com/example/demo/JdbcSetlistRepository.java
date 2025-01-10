@@ -51,7 +51,10 @@ public class JdbcSetlistRepository implements SetListRepository {
     private Show mapRowToShow(ResultSet resultSet, int rowNum) throws SQLException {
         return new Show(
                 resultSet.getInt("id"),
-                resultSet.getString("nama_show")
+                resultSet.getString("nama_show"),
+                resultSet.getString("lokasi_show"), // Menambahkan lokasi_show
+                resultSet.getDate("tanggal_show").toLocalDate() // Mengubah tanggal_show menjadi LocalDate
         );
     }
+    
 }

@@ -5,6 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan</title>
     <link rel="stylesheet" href="/Admin/styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script>
+        // JavaScript untuk menampilkan tabel berdasarkan pilihan
+        function showTable() {
+        const reportType = document.getElementById('report-type').value;
+        const userActivityTable = document.getElementById('user-activity-table');
+        const showSummaryTable = document.getElementById('show-summary'); // Tambahkan referensi untuk tabel show-summary
+        const otherTables = document.querySelectorAll('.report-table');
+
+        // Sembunyikan semua tabel terlebih dahulu
+        otherTables.forEach(table => table.style.display = 'none');
+
+        // Tampilkan tabel "user-activity" jika opsi dipilih
+        if (reportType === 'user-activity') {
+        userActivityTable.style.display = 'table';
+        }
+        // Tampilkan tabel "show-summary" jika opsi "Ringkasan Show" dipilih
+        if (reportType === 'show-summary') {
+        showSummaryTable.style.display = 'table';
+        }
+}
+
+
+        
+    </script>
+
+    
 </head>
 <body>
     <div class="wrapper">
@@ -26,13 +78,51 @@
             <h1>Laporan</h1>
             <form>
                 <label for="report-type">Jenis Laporan:</label>
-                <select id="report-type">
-                    <option value="user-activity">Aktivitas Pengguna</option>
+                <select id="report-type" onchange="showTable()">
+                    <option value="none" selected>Pilih Jenis Laporan</option>
+                    <option value="user-activity">Member</option>
                     <option value="setlist-summary">Ringkasan Setlist</option>
                     <option value="show-summary">Ringkasan Show</option>
                 </select>
-                <button type="submit" class="btn">Generate Laporan</button>
             </form>
+
+            <!-- Tabel Aktivitas Pengguna -->
+            <table id="user-activity-table" class="report-table" border="1" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop untuk menampilkan data pengguna -->
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member.username}"></td>
+                        <td th:text="${member.password}"></td> <!-- Tampilkan email -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tabel lainnya (sebagai placeholder) -->
+            <table id="show-summary" class="report-table" border="1" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Show</th>
+                        <th>lokasi Show</th>
+                        <th>Tanggal Show</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop untuk menampilkan semua data show -->
+                    <tr th:each="show : ${shows}">
+                        <td th:text="${show.namaShow}"></td>
+                        <td th:text="${show.lokasiShow}"></td>
+                        <td th:text="${show.tanggalShow}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            
         </main>
     </div>
 </body>

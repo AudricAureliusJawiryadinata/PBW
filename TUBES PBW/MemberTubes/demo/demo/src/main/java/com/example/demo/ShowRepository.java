@@ -1,9 +1,10 @@
 package com.example.demo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ShowRepository {
-    void addShow(String namaShow); // Tambah Show
-    List<Show> findAllShows(); // Ambil semua Show
-    Show findShowById(int showId); // Ambil Show berdasarkan ID
+    void addShow(String namaShow, String lokasiShow, LocalDate tanggalShow);
+    List<Show> findAllShows();
+    Show findShowById(int showId);
 }

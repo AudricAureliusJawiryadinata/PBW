@@ -1,8 +1,10 @@
 package com.example.demo.Admin;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.SetListRepository;
+import com.example.demo.Show;
 import com.example.demo.ShowRepository;
 import com.example.demo.Member.Member; // Impor kelas Member
 import com.example.demo.Member.MemberRepository; // Impor MemberRepository
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 @Controller
 
 public class AdminController {
@@ -55,15 +64,20 @@ public class AdminController {
     }
     @Autowired
     private ShowRepository showRepository;
+
     @PostMapping("/admin/add-show")
-    public String addShow(@RequestParam("showName") String namaShow, RedirectAttributes redirectAttributes) {
+    public String addShow(
+            @RequestParam("showName") String namaShow,
+            @RequestParam("showLocation") String lokasiShow,
+            @RequestParam("showDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate tanggalShow,
+            RedirectAttributes redirectAttributes) {
         try {
-            showRepository.addShow(namaShow);
+            showRepository.addShow(namaShow, lokasiShow, tanggalShow); // Memasukkan lokasi dan tanggal
             redirectAttributes.addFlashAttribute("successMessage", "Show berhasil ditambahkan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan show: " + e.getMessage());
         }
-        return "redirect:/admin/AddShow"; // Redirect back to the AddShow page
+        return "redirect:/admin/AddShow"; // Redirect kembali ke halaman AddShow
     }
 
     @GetMapping("/admin/AddSetList")
@@ -98,9 +112,15 @@ public class AdminController {
 
     @GetMapping("/admin/Report")
     public String showGenerateReportPage(Model model) {
-        model.addAttribute("pageTitle", "Laporan");
+        List<Member> members = memberRepository.findAll(); // Ambil data member
+        model.addAttribute("members", members);
+        
+        List<Show> shows = showRepository.findAllShows(); // Ambil data show
+        model.addAttribute("shows", shows);
         return "Report"; // Harus sesuai dengan generate-report.html
+        
     }
+  
     @PostMapping("/admin/loginAdmin")
     public String handleAdminLogin(@RequestParam String username, @RequestParam String password, Model model) {
         // Gunakan metode isValidAdmin untuk memeriksa username dan password di database

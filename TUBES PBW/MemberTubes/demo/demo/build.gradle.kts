@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -34,6 +34,7 @@ implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation ("jakarta.persistence:jakarta.persistence-api:3.1.0")
 }
 
 tasks.withType<Test> {

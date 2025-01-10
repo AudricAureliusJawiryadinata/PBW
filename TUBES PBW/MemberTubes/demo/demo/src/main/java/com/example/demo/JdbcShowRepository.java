@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -15,9 +16,9 @@ public class JdbcShowRepository implements ShowRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public void addShow(String namaShow) {
-        String sql = "INSERT INTO show (nama_show) VALUES (?)";
-        jdbcTemplate.update(sql, namaShow);
+    public void addShow(String namaShow, String lokasiShow, LocalDate tanggalShow) {
+        String sql = "INSERT INTO show (nama_show, lokasi_show, tanggal_show) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, namaShow, lokasiShow, tanggalShow);
     }
 
     @Override
@@ -35,7 +36,9 @@ public class JdbcShowRepository implements ShowRepository {
     private Show mapRowToShow(ResultSet resultSet, int rowNum) throws SQLException {
         return new Show(
                 resultSet.getInt("id"),
-                resultSet.getString("nama_show")
+                resultSet.getString("nama_show"),
+                resultSet.getString("lokasi_show"),
+                resultSet.getDate("tanggal_show").toLocalDate()
         );
     }
 }
