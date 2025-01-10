@@ -37,14 +37,16 @@ CREATE TABLE show (
     lokasi_show VARCHAR(255) NOT NULL,
     tanggal_show DATE NOT NULL,
 );
-
 CREATE TABLE setlist (
     id SERIAL PRIMARY KEY,
     nama_lagu VARCHAR(100) NOT NULL,
     show_terkait VARCHAR(100) NOT NULL,
     show_id INT NOT NULL,
-    FOREIGN KEY (show_id) REFERENCES show (id)
+    artist_id INT,
+    FOREIGN KEY (show_id) REFERENCES show (id),
+    FOREIGN KEY (artist_id) REFERENCES artis (id)
 );
+
 
 CREATE TABLE song (
     id SERIAL PRIMARY KEY,
@@ -105,16 +107,24 @@ VALUES
     ('Show 1'),
     ('Show 2');
 	
-INSERT INTO setlist (nama_lagu, show_terkait, show_id)
-VALUES
-    ('Shape of You', 'Show 1',1),
-    ('Rolling in the Deep', 'Show 2',2),
-    ('Nothing Else Matters', 'Show 1',1),
-    ('Butter', 'Show 2',2),
-    ('Someone Like You', 'Show 1',1);
-
 ALTER TABLE show
 ALTER COLUMN lokasi_show DROP DEFAULT,
 ALTER COLUMN tanggal_show DROP DEFAULT;
 
-DELETE FROM show WHERE id = '11'
+UPDATE setlist
+SET nama_artis = artis.nama_artis
+FROM artis
+WHERE setlist.artist_id = artis.id
+  AND setlist.nama_artis IS NULL;
+
+SELECT id, nama_lagu, show_terkait, nama_artis
+FROM setlist
+WHERE nama_artis IS NOT NULL;
+
+INSERT INTO setlist (nama_lagu, show_terkait, show_id, artist_id, nama_artis)
+VALUES
+    ('Shape of You', 'Show 1', 1, 1, 'Ed Sheeran'),
+    ('Rolling in the Deep', 'Show 2', 2, 2, 'Adele');
+
+DELETE FROM setlist WHERE id = '8'
+DELETE FROM setlist WHERE id = '9'

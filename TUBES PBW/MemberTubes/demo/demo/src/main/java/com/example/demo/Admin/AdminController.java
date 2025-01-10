@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.ArtistRepository;
 import com.example.demo.SetListRepository;
 import com.example.demo.Show;
 import com.example.demo.ShowRepository;
@@ -79,12 +80,16 @@ public class AdminController {
         }
         return "redirect:/admin/AddShow"; // Redirect kembali ke halaman AddShow
     }
-
+    @Autowired
+    private ArtistRepository artistRepository; 
     @GetMapping("/admin/AddSetList")
     public String showAddSetlistPage(Model model) {
-        model.addAttribute("shows", setListRepository.findAllShows());  // Pass shows to the view
-        return "AddSetList"; // Harus sesuai dengan add-setlist.html
+        model.addAttribute("shows", showRepository.findAllShows()); // Pass daftar shows ke view
+        model.addAttribute("artisList", artistRepository.findAllArtists()); // Pass daftar artis ke view
+        return "AddSetList"; // Pastikan nama file HTML sesuai
     }
+    
+    
     @Autowired
     private SetListRepository setListRepository; // Correctly autowiring the repository
     

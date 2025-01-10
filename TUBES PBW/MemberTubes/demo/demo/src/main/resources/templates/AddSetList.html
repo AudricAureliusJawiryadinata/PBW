@@ -59,6 +59,11 @@
         <main class="content">
             <h1>Tambah Setlist</h1>
             <form action="/admin/add-setlist" method="post">
+                <label for="setlist-artist">Artis Terkait:</label>
+                <select id="setlist-artist" name="artistId" required>
+                    <option th:each="artis : ${artisList}" th:value="${artis.id}" th:text="${artis.namaArtis}"></option>
+                </select>
+                
                 <label for="setlist-name">Nama Lagu:</label>
                 <input type="text" id="setlist-name" name="setlistName" placeholder="Masukkan nama lagu" required>
                 
