@@ -31,24 +31,13 @@
         <!-- Pencarian Setlist -->
         <section id="search-section" class="search-section">
             <h2>Temukan Setlist</h2>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Cari Artis, Konser, atau Lagu">
-                <button id="search-btn" class="btn btn-search">Cari</button>
-            </div>
-            <div class="search-filters">
-                <select id="artist-filter">
-                    <option value="">Semua Artis</option>
-                </select>
-                <select id="genre-filter">
-                    <option value="">Semua Genre</option>
-                    <option value="rock">Rock</option>
-                    <option value="pop">Pop</option>
-                    <option value="rb">R&B</option>
-                </select>
-                <select id="year-filter">
-                    <option value="">Tahun Konser</option>
-                </select>
-            </div>
+            <form action="/search" method="post">
+                <div class="search-container">
+                    <!-- Input tunggal untuk mencari artis atau show -->
+                    <input type="text" name="query" id="search-input" placeholder="Cari Artis atau Show">
+                    <button type="submit" id="search-btn" class="btn btn-search">Cari</button>
+                </div>
+            </form>
         </section>
 
         <!-- Artis Terpopuler -->

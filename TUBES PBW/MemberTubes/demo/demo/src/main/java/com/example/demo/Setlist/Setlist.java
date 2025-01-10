@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Setlist;
 
 public class Setlist {
     private int id;

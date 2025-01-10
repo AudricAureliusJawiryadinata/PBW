@@ -1,4 +1,4 @@
-package com.example.demo.Member;
+package com.example.demo.Comment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetList Konser - [[${artist}]]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Guest/Guest.css">
+</head>
+<body>
+    <!-- Navigasi -->
+    <nav id="navbar">
+        <div class="navbar-brand">SetList Konser</div>
+        <div class="navbar-menu">
+            <a href="#home">Beranda</a>
+            <a href="#artists">Artis</a>
+            <a href="#shows">Konser</a>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <img src="/Guest/background-image.jpg" alt="Background Image">
+        <div class="hero-content">
+            <h1 th:text="${artist} != null ? artist + ' Setlist' : show + ' Setlist'"></h1>
+            <p>Temukan, bagikan, dan simpan daftar lagu dari konser favoritmu!</p>
+        </div>
+    </section>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Section Setlist -->
+        <section>
+            <h2 class="section-title">Setlist</h2>
+            <ul class="setlist" th:if="${setlist != null}">
+                <li th:each="song : ${setlist}">
+                    <span class="song-title" th:text="${song.namaLagu}"></span>
+                    <span class="notes" th:text="${song.showTerkait}"></span>
+                </li>
+            </ul>
+            <p th:if="${setlist == null}">Tidak ada setlist yang ditemukan.</p>
+        </section>
+
+        <!-- Section Show (Jika pencarian berdasarkan Artis) -->
+        <section th:if="${concertTimeline != null && artist != null}">
+            <h2 class="section-title">Show</h2>
+            <ul class="timeline">
+                <li th:each="concert : ${concertTimeline}">
+                    <div>
+                        <strong th:text="${concert.tanggalShow}"></strong>
+                        <span th:text="${concert.lokasiShow}"></span>
+                    </div>
+                </li>
+            </ul>
+            <p th:if="${concertTimeline == null}">Tidak ada show yang ditemukan.</p>
+        </section>
+
+        <!-- Section Artis (Jika pencarian berdasarkan Show) -->
+        <section th:if="${artists != null && show != null}">
+            <h2 class="section-title">Artis</h2>
+            <ul class="artists">
+                <li th:each="artist : ${artists}">
+                    <span class="artist-name" th:text="${artist.namaArtis}"></span>
+                    <span class="artist-genre" th:text="'(' + artist.genreMusik + ')'"></span>
+                </li>
+            </ul>
+            <p th:if="${artists == null}">Tidak ada artis yang ditemukan.</p>
+        </section>
+    </div>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SetList Konser</h4>
+                <p>Platform berbagi setlist konser terlengkap</p>
+            </div>
+            <div class="footer-section">
+                <h4>Tautan Cepat</h4>
+                <ul>
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#artists">Artis</a></li>
+                    <li><a href="#shows">Konser</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Hubungi Kami</h4>
+                <p>Email: support@setlistkonser.com</p>
+                <p>Telepon: +62 812 3456 7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
+            <p>Bersama Kami, Musik Selalu Hidup</p>
+        </div>
+    </footer>
+</body>
+</html>

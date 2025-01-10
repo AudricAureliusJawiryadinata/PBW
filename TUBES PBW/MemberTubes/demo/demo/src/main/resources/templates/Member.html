@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SetList Konser - Fitur Member</title>
+    <title>SetList Konser - Tambah Komentar</title>
     <link rel="stylesheet" href="/Member/styles.css">
 </head>
 <body>
@@ -15,88 +15,50 @@
                 <li><a href="#add-artist">Tambah Artis</a></li>
                 <li><a href="#add-show">Tambah Show</a></li>
                 <li><a href="#add-setlist">Tambah Setlist</a></li>
-                <li><a href="#comment-correction">Komentar & Koreksi</a></li>
+                <li><a href="#add-comment">Komentar & Koreksi</a></li> 
                 <li><a href="#history">History Perubahan</a></li>
             </ul>
             <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
-
-        <!-- Konten Utama -->
-        <main class="content">
-            <h1>Selamat Datang, Member!</h1>
-            <p>Gunakan fitur berikut untuk berkontribusi pada komunitas SetList Konser.</p>
-            <!-- Tambah Artis -->
-            <section id="add-artist" class="feature-section">
-                <h2>Tambah Artis</h2>
-                <form>
-                    <label for="artist-name">Nama Artis:</label>
-                    <input type="text" id="artist-name" placeholder="Masukkan nama artis">
-                    
-                    <label for="artist-genre">Genre Musik:</label>
-                    <input type="text" id="artist-genre" placeholder="Masukkan genre musik">
-                    
-                    <button type="submit" class="btn">Tambah Artis</button>
-                </form>
-            </section>
-
-            <!-- Tambah Show -->
-            <section id="add-show" class="feature-section">
-                <h2>Tambah Show</h2>
-                <form>
-                    <label for="show-name">Nama Show:</label>
-                    <input type="text" id="show-name" placeholder="Masukkan nama show">
-                    
-                    <label for="show-date">Tanggal Show:</label>
-                    <input type="date" id="show-date">
-                    
-                    <label for="show-location">Lokasi Show:</label>
-                    <input type="text" id="show-location" placeholder="Masukkan lokasi show">
-                    
-                    <button type="submit" class="btn">Tambah Show</button>
-                </form>
-            </section>
-
-            <!-- Tambah Setlist -->
-            <section id="add-setlist" class="feature-section">
-                <h2>Tambah Setlist</h2>
-                <form>
-                    <label for="setlist-name">Nama Lagu:</label>
-                    <input type="text" id="setlist-name" placeholder="Masukkan nama lagu">
-                    
-                    <label for="setlist-show">Show Terkait:</label>
-                    <select id="setlist-show">
-                        <option value="show1">Show 1</option>
-                        <option value="show2">Show 2</option>
-                    </select>
-                    
-                    <button type="submit" class="btn">Tambah Setlist</button>
-                </form>
-            </section>
-
-            <!-- Komentar dan Koreksi -->
-            <section id="comment-correction" class="feature-section">
-                <h2>Komentar & Koreksi</h2>
-                <form>
-                    <label for="comment">Komentar atau Koreksi:</label>
-                    <textarea id="comment" placeholder="Tulis komentar atau koreksi..."></textarea>
-                    
-                    <button type="submit" class="btn">Kirim Komentar</button>
-                </form>
-            </section>
-
-            <!-- History Perubahan -->
-            <section id="history" class="feature-section">
-                <h2>History Perubahan</h2>
-                <ul>
-                    <li>
-                        <p><strong>2024-12-01</strong>: Artis "A" ditambahkan oleh user123</p>
-                    </li>
-                    <!-- History lainnya bisa ditambahkan di sini -->
-                </ul>
-            </section>
-        </main>
     </div>
 
-
+    <script>
+        // Fungsi untuk mengambil komentar berdasarkan showId
+        function fetchComments(showId) {
+            fetch(`/comments/show/${showId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Komentar yang diterima:", data);  // Menambahkan logging untuk melihat data yang diterima
+                    const commentsList = document.getElementById('commentsList');
+                    commentsList.innerHTML = ''; // Menghapus komentar yang ada
+    
+                    if (data.length === 0) {
+                        commentsList.innerHTML = "<li>Tidak ada komentar untuk show ini.</li>";
+                        return;
+                    }
+    
+                    // Menampilkan komentar yang diterima
+                    data.forEach(comment => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>Show ${comment.showId}:</strong> "${comment.commentText}" <em>(by ${comment.username})</em>`;
+                        commentsList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.log('Error fetching comments:', error); // Menambahkan logging jika terjadi error
+                    const commentsList = document.getElementById('commentsList');
+                    commentsList.innerHTML = "<li>Gagal mengambil data komentar.</li>";
+                });
+        }
+    
+        // Mengambil komentar saat halaman dimuat
+        document.getElementById('show-select').addEventListener('change', function () {
+            const showId = this.value;
+            fetchComments(showId);
+        });
+    
+        // Initial load untuk showId default
+        fetchComments(document.getElementById('show-select').value);
+    </script>
 </body>
 </html>

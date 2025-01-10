@@ -1,6 +1,7 @@
 package com.example.demo.Member;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,15 +9,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.JdbcSetlistRepository;
-import com.example.demo.SetListRepository;
-import com.example.demo.Show;
-import com.example.demo.ShowRepository;
+import com.example.demo.Artis.Artis;
+import com.example.demo.Artis.ArtisRepository;
+import com.example.demo.Setlist.JdbcSetlistRepository;
+import com.example.demo.Setlist.SetListRepository;
+import com.example.demo.Show.Show;
+import com.example.demo.Show.ShowRepository;
 
-import java.util.List; // Tambahkan ini!
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 @Controller
 public class MemberController {
 
@@ -49,34 +60,46 @@ public class MemberController {
     }
     @Autowired
     private ShowRepository showRepository;
+
     @PostMapping("/member/add-show")
-    public String addShow(@RequestParam("showName") String namaShow, RedirectAttributes redirectAttributes) {
+    public String addShow(
+            @RequestParam("showName") String namaShow,
+            @RequestParam("showLocation") String lokasiShow,
+            @RequestParam("showDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate tanggalShow,
+            RedirectAttributes redirectAttributes) {
         try {
-            showRepository.addShow(namaShow);
+            showRepository.addShow(namaShow, lokasiShow, tanggalShow);
             redirectAttributes.addFlashAttribute("successMessage", "Show berhasil ditambahkan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan show: " + e.getMessage());
         }
-        return "redirect:/MemberAddShow"; // Redirect back to the Member Add Show page
+        return "redirect:/MemberAddShow";
     }
 
-    /**
-     * Menampilkan halaman MemberAddSetlist.html
-     */
+    @Autowired
+    private ArtisRepository artistRepository; // Repository untuk tabel artis
+
     @GetMapping("/MemberAddSetlist")
-    public String showMemberAddSetlistPage(Model model) {
-        // Menambahkan data show untuk dropdown
-        model.addAttribute("shows", setListRepository.findAllShows());
-        return "MemberAddSetlist"; // Halaman HTML untuk Member
+    public String showAddSetlistForm(Model model) {
+        // Ambil daftar artis dan show dari database
+        List<Artis> artisList = artistRepository.findAllArtists();
+        List<Show> shows = showRepository.findAllShows();
+        
+        // Tambahkan ke model
+        model.addAttribute("artisList", artisList);
+        model.addAttribute("shows", shows);
+        return "memberAddSetlist"; // Nama file HTML
     }
   
     @PostMapping("/member/add-setlist")
     public String addSetlist(@RequestParam("setlistName") String namaLagu,
                              @RequestParam("showId") int showId,
+                             @RequestParam("artisId") int artisId,
                              RedirectAttributes redirectAttributes) {
         try {
             String showTerkait = setListRepository.getShowNameById(showId); // Ambil nama show
-            setListRepository.addSetlist(namaLagu, showTerkait, showId); // Simpan ke database
+            String artisTerkait = setListRepository.getArtisNameById(artisId); // Ambil nama artis
+            setListRepository.addSetlist(namaLagu, showTerkait, showId, artisTerkait, artisId); // Simpan ke database
             redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil ditambahkan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan setlist: " + e.getMessage());
@@ -95,20 +118,45 @@ public class MemberController {
         model.addAttribute("shows", shows);
         return "MemberKomentar"; // The page where you want to show the dropdown
     }
-    @Autowired
-    private CommentRepository commentRepository;
 
-    @PostMapping("/member/comment")
-    public String submitComment(@RequestParam String commentText, @RequestParam int showId, RedirectAttributes redirectAttributes) {
-        // Save the comment
-        commentRepository.addComment(commentText, showId);
+    // @Autowired
+    // private CommentsService commentsService;
+    //   // Menyuntikkan MemberRepository
+    
+    // @PostMapping("/member/comment")
+    // public String submitComment(@RequestParam String commentText, 
+    //                             @RequestParam int showId, 
+    //                             HttpSession session, 
+    //                             RedirectAttributes redirectAttributes) {
+        
+    //     // Get the username from the session
+    //     String username = (String) session.getAttribute("username");
+        
+    //     if (username == null) {
+    //         redirectAttributes.addFlashAttribute("errorMessage", "Username tidak ditemukan. Silakan login terlebih dahulu.");
+    //         return "redirect:/MemberKomentar";  // Redirect to login page
+    //     }
+        
+    //     // Fetch the member by username
+    //     Member member = memberRepository.findByUsername(username);
+        
+    //     if (member == null) {
+    //         redirectAttributes.addFlashAttribute("errorMessage", "Username tidak ditemukan.");
+    //         return "redirect:/MemberKomentar?showId=" + showId;
+    //     }
+        
+    //     // Create the comment and save it
+    //     Comment comment = new Comment(0, member.getId(), showId, commentText, new Timestamp(System.currentTimeMillis()));
+    //     commentsService.addComment(comment);
+        
+    //     redirectAttributes.addFlashAttribute("successMessage", "Komentar berhasil dikirim!");
+    //     return "redirect:/MemberKomentar?showId=" + showId;
+    // }
+    
+    
 
-        // Add success message
-        redirectAttributes.addFlashAttribute("successMessage", "Komentar berhasil dikirim!");
-
-        // Redirect to the same page
-        return "redirect:/MemberKomentar?showId=" + showId;
-    }
+    
+    
     /**
      * Menampilkan halaman MemberHistory.html
      */
@@ -121,18 +169,22 @@ public class MemberController {
      * Memproses login dan memvalidasi username & password
      */
     @PostMapping("/login")
-    public String handleLogin(@RequestParam String username,
-                              @RequestParam String password,
-                              RedirectAttributes redirectAttributes) {
-        // Validasi username dan password menggunakan repository
-        if (memberRepository.isValidUser(username, password)) {
-            return "redirect:/MemberAddArtist"; // Jika valid, arahkan ke halaman MemberAddArtist.html
-        }
-
-        // Jika tidak valid, tambahkan pesan error sebagai query parameter
-        redirectAttributes.addAttribute("error", "Username atau password salah.");
-        return "redirect:/member/loginmember"; // Redirect ke halaman login yang benar
+public String handleLogin(@RequestParam String username,
+                          @RequestParam String password,
+                          HttpSession session,  // Menambahkan HttpSession untuk menyimpan data sesi
+                          RedirectAttributes redirectAttributes) {
+    // Validasi username dan password menggunakan repository
+    if (memberRepository.isValidUser(username, password)) {
+        // Menyimpan username dalam sesi setelah login berhasil
+        session.setAttribute("username", username);
+        return "redirect:/MemberAddArtist"; // Jika valid, arahkan ke halaman MemberAddArtist
     }
+
+    // Jika tidak valid, tambahkan pesan error sebagai query parameter
+    redirectAttributes.addAttribute("error", "Username atau password salah.");
+    return "redirect:/member/loginmember"; // Redirect ke halaman login yang benar
+}
+
 
     /**
      * Logout dan hapus sesi pengguna

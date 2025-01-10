@@ -1,12 +1,12 @@
-package com.example.demo;
+package com.example.demo.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class LogInAdminController {
-    @GetMapping("/loginAdmin")
+public class LogInMemberController {
+    @GetMapping("/loginMember")
     public String showMemberPage(Model model) {
-        return "LoginAdmin";
+        return "LoginMember";
     }
 }
