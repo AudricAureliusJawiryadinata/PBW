@@ -7,38 +7,50 @@
     <link rel="stylesheet" href="/Member/styles.css">
     <script>
         // JavaScript untuk menampilkan pop-up
-            function showAlert(message, type) {
-                const alertBox = document.createElement('div');
-                alertBox.className = `alert ${type}`;
-                alertBox.textContent = message;
-                document.body.appendChild(alertBox);
-    
-                // Hapus pop-up setelah 3 detik
-                setTimeout(() => {
-                    alertBox.remove();
-                }, 3000);
-            }
-        </script>
-        <style>
-            /* Gaya untuk pop-up */
-            .alert {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px;
-                border-radius: 5px;
-                color: white;
-                font-size: 16px;
-                z-index: 1000;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            }
-            .alert.success {
-                background-color: #28a745; /* Hijau untuk keberhasilan */
-            }
-            .alert.error {
-                background-color: #dc3545; /* Merah untuk kesalahan */
-            }
-        </style>
+        function showAlert(message, type) {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert ${type}`;
+            alertBox.textContent = message;
+            document.body.appendChild(alertBox);
+
+            // Hapus pop-up setelah 3 detik
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
+        }
+    </script>
+    <style>
+        /* Gaya untuk pop-up */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            z-index: 1000;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .alert.success {
+            background-color: #28a745;
+        }
+        .alert.error {
+            background-color: #dc3545;
+        }
+        .btn-download {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn-download:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -54,34 +66,51 @@
             </ul>
             <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
-        
+
         <main class="content">
         <h1>Tambah Setlist</h1>
         <form action="/member/add-setlist" method="post">
-            <label for="setlist-artist">Artis Terkait:</label>
-            <select id="setlist-artist" name="artistId" required>
+            <label for="artistId">Artis Terkait:</label>
+            <select id="artistId" name="artistId" required onchange="updateNamaArtis(this)">
                 <option th:each="artis : ${artisList}" th:value="${artis.id}" th:text="${artis.namaArtis}"></option>
             </select>
-            
-            <label for="setlist-name">Nama Lagu:</label>
-            <input type="text" id="setlist-name" name="setlistName" placeholder="Masukkan nama lagu" required>
-            
-            <label for="setlist-show">Show Terkait:</label>
-            <select id="setlist-show" name="showId" required>
+        
+            <!-- Hidden input for the artist name -->
+            <input type="hidden" id="namaArtis" name="namaArtis" value="">
+
+            <label for="setlistName">Nama Lagu:</label>
+            <input type="text" id="setlistName" name="setlistName" required>
+        
+            <label for="showId">Show Terkait:</label>
+            <select id="showId" name="showId" required>
                 <option th:each="show : ${shows}" th:value="${show.id}" th:text="${show.namaShow}"></option>
             </select>
-            
+        
+
+        
             <button type="submit" class="btn">Tambah Setlist</button>
         </form>
-        
+
+        <h2>Unduh Database Setlist</h2>
+        <form action="/member/MemberAddSetlist" method="get">
+            <button type="submit" class="btn-download">Unduh Setlist</button>
+        </form>
         
     </main>
     </div>
-        <!-- Thymeleaf Script -->
-        <script th:inline="javascript">
-            /* Jika ada pesan sukses, tampilkan pop-up */
-            [[${successMessage}]] ? showAlert('[[${successMessage}]]', 'success') : '';
-            [[${errorMessage}]] ? showAlert('[[${errorMessage}]]', 'error') : '';
-        </script>
+    <!-- Thymeleaf Script -->
+    <script th:inline="javascript">
+        /* Jika ada pesan sukses, tampilkan pop-up */
+        [[${successMessage}]] ? showAlert('[[${successMessage}]]', 'success') : '';
+        [[${errorMessage}]] ? showAlert('[[${errorMessage}]]', 'error') : '';
+    </script>
+    <script>
+        // JavaScript to update the hidden input field with the selected artist's name
+        function updateNamaArtis(selectElement) {
+            var selectedArtistId = selectElement.value;
+            var selectedArtistName = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById("namaArtis").value = selectedArtistName;
+        }
+    </script>
 </body>
 </html>

@@ -5,12 +5,14 @@ public class Setlist {
     private String namaLagu;
     private String showTerkait;
     private int showId;
+    private String namaArtis;  // Added artist name field
 
-    public Setlist(int id, String namaLagu, String showTerkait, int showId) {
+    public Setlist(int id, String namaLagu, String showTerkait, int showId, String namaArtis) {
         this.id = id;
         this.namaLagu = namaLagu;
         this.showTerkait = showTerkait;
         this.showId = showId;
+        this.namaArtis = namaArtis;  // Initialize artist name
     }
 
     // Getters and Setters
@@ -44,5 +46,13 @@ public class Setlist {
 
     public void setShowId(int showId) {
         this.showId = showId;
+    }
+
+    public String getNamaArtis() {
+        return namaArtis;
+    }
+
+    public void setNamaArtis(String namaArtis) {
+        this.namaArtis = namaArtis;
     }
 }

@@ -16,22 +16,18 @@ import com.example.demo.SetListRepository;
 import com.example.demo.Show;
 import com.example.demo.ShowRepository;
 import com.example.demo.Comment.Comment;
-import com.example.demo.Comment.CommentsRepository;
 import com.example.demo.Comment.CommentsService;
 
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.demo.Setlist;
 
-import java.time.LocalDate;
-
+import java.io.IOException;
+import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class MemberController {
 
@@ -85,29 +81,37 @@ public class MemberController {
 
     @GetMapping("/MemberAddSetlist")
     public String showAddSetlistForm(Model model) {
-        // Ambil daftar artis dan show dari database
+        // Fetch all artists and shows from the database
         List<Artist> artisList = artistRepository.findAllArtists();
         List<Show> shows = showRepository.findAllShows();
         
-        // Tambahkan ke model
+        // Add the data to the model so that Thymeleaf can use it
         model.addAttribute("artisList", artisList);
         model.addAttribute("shows", shows);
-        return "memberAddSetlist"; // Nama file HTML
+    
+        return "memberAddSetlist";  // Name of your HTML file (view)
     }
+    
   
     @PostMapping("/member/add-setlist")
     public String addSetlist(@RequestParam("setlistName") String namaLagu,
                              @RequestParam("showId") int showId,
+                             @RequestParam("artistId") int artistId,  // Capture artistId from the form
+                             @RequestParam("namaArtis") String namaArtis, // Capture artist name
                              RedirectAttributes redirectAttributes) {
         try {
-            String showTerkait = setListRepository.getShowNameById(showId); // Ambil nama show
-            setListRepository.addSetlist(namaLagu, showTerkait, showId); // Simpan ke database
+            String showTerkait = setListRepository.getShowNameById(showId); // Get show name by ID
+            // Call the addSetlist method with artistId and namaArtis
+            setListRepository.addSetlist(namaLagu, showTerkait, showId, artistId, namaArtis);
+    
             redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil ditambahkan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan setlist: " + e.getMessage());
         }
-        return "redirect:/MemberAddSetlist"; // Kembali ke
+        return "redirect:/MemberAddSetlist"; // Redirect back
     }
+    
+    
     
     /**
      * Menampilkan halaman MemberKomentar.html
@@ -257,5 +261,28 @@ public String handleLogin(@RequestParam String username,
         return "redirect:/admin/ManageUser";
     }
 
+    @GetMapping("/member/MemberAddSetlist")
+    public void downloadSetlist(HttpServletResponse response) throws IOException {
+        // Set header for file download
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"setlist.csv\"");
+    
+        // Get setlist data from the database
+        List<Setlist> setlists = setlistRepository.findAllSetList();
+    
+        // Write data to the output stream as CSV
+        PrintWriter writer = response.getWriter();
+        writer.println("ID, Nama Artis, Nama Lagu, Nama Show");  // Column headers
+    
+        // Write each setlist row to the CSV
+        for (Setlist setlist : setlists) {
+            writer.println(setlist.getId() + "," + setlist.getNamaArtis() + "," + setlist.getNamaLagu() + "," + setlist.getShowTerkait());
+        }
+    
+        writer.flush();
+        writer.close();
+    }
+    
+    
 }
 

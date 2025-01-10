@@ -1,4 +1,5 @@
 package com.example.demo.Admin;
+import com.example.demo.Setlist;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -96,16 +97,21 @@ public class AdminController {
     @PostMapping("/admin/add-setlist")
     public String addSetlist(@RequestParam("setlistName") String namaLagu,
                              @RequestParam("showId") int showId,
+                             @RequestParam("artistId") int artistId, 
+                             @RequestParam("namaArtis") String namaArtis, // Capture artist name // Capture artistId from the form
                              RedirectAttributes redirectAttributes) {
         try {
-            String showTerkait = setListRepository.getShowNameById(showId); // Correct call
-            setListRepository.addSetlist(namaLagu, showTerkait, showId); // Correct call
+            String showTerkait = setListRepository.getShowNameById(showId); // Get show name by showId
+            // Call the addSetlist method with artistId
+            setListRepository.addSetlist(namaLagu, showTerkait, showId, artistId, namaArtis);
+    
             redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil ditambahkan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan setlist: " + e.getMessage());
         }
-        return "redirect:/admin/AddSetList"; // Redirect to the same page
+        return "redirect:/admin/AddSetList"; // Redirect back to the setlist form
     }
+    
     
     @GetMapping("/admin/ManageUser")
     public String showManageUsersPage(Model model) {
@@ -117,13 +123,20 @@ public class AdminController {
 
     @GetMapping("/admin/Report")
     public String showGenerateReportPage(Model model) {
-        List<Member> members = memberRepository.findAll(); // Ambil data member
-        model.addAttribute("members", members);
-        
-        List<Show> shows = showRepository.findAllShows(); // Ambil data show
-        model.addAttribute("shows", shows);
-        return "Report"; // Harus sesuai dengan generate-report.html
-        
+        // Fetch all members
+        List<Member> members = memberRepository.findAll();
+        model.addAttribute("members", members);  // Add members to model
+    
+        // Fetch all shows
+        List<Show> shows = showRepository.findAllShows();
+        model.addAttribute("shows", shows);  // Add shows to model
+    
+        // Fetch all setlists
+        List<Setlist> setlists = setListRepository.findAllSetList();
+        model.addAttribute("setlists", setlists);  // Add setlists to model
+    
+        // Return the view name "Report" that will render the generate-report.html template
+        return "Report";
     }
   
     @PostMapping("/admin/loginAdmin")
