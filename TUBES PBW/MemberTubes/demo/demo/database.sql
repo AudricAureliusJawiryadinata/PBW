@@ -121,10 +121,5 @@ SELECT id, nama_lagu, show_terkait, nama_artis
 FROM setlist
 WHERE nama_artis IS NOT NULL;
 
-INSERT INTO setlist (nama_lagu, show_terkait, show_id, artist_id, nama_artis)
-VALUES
-    ('Shape of You', 'Show 1', 1, 1, 'Ed Sheeran'),
-    ('Rolling in the Deep', 'Show 2', 2, 2, 'Adele');
-
 DELETE FROM setlist WHERE id = '8'
 DELETE FROM setlist WHERE id = '9'
