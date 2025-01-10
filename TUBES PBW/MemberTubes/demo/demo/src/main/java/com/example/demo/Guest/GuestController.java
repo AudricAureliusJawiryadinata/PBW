@@ -10,5 +10,5 @@ public class guestController {
     public String showMemberPage(Model model) {
         return "Guest";
     }
-
+    
 }
