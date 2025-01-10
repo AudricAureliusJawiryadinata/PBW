@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetList Konser - Jelajahi Musik Lewat Daftar Lagu</title>
+    <link rel="stylesheet" href="Guest/Guest.css">
+</head>
+<body>
+    <!-- Navigasi -->
+    <nav id="navbar">
+        <div class="navbar-brand">SetList Konser</div>
+        <div class="navbar-menu">
+            <a href="#home">Beranda</a>
+            <a href="#artists">Artis</a>
+            <a href="#shows">Konser</a>
+        </div>
+    </nav>
+
+    <!-- Konten Utama -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <img src="/Guest/background-image.jpg" alt="Background Image">
+            <div class="hero-content">
+                <h1>Jelajahi Musik Lewat SetList</h1>
+                <p>Temukan, bagikan, dan simpan daftar lagu dari konser favoritmu!</p>
+            </div>
+        </section>
+
+        <!-- Pencarian Setlist -->
+        <section id="search-section" class="search-section">
+            <h2>Temukan Setlist</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Cari Artis, Konser, atau Lagu">
+                <button id="search-btn" class="btn btn-search">Cari</button>
+            </div>
+            <div class="search-filters">
+                <select id="artist-filter">
+                    <option value="">Semua Artis</option>
+                </select>
+                <select id="genre-filter">
+                    <option value="">Semua Genre</option>
+                    <option value="rock">Rock</option>
+                    <option value="pop">Pop</option>
+                    <option value="rb">R&B</option>
+                </select>
+                <select id="year-filter">
+                    <option value="">Tahun Konser</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Artis Terpopuler -->
+        <section id="artists" class="artists-section">
+            <h2>Artis Terpopuler</h2>
+            <div id="artists-grid" class="artists-grid">
+                <div class="artist-card">
+                    <img src="Guest/coldplay.jpg" alt="Coldplay" class="artist-image">
+                    <div class="artist-info">
+                        <h3>Coldplay</h3>
+                        <p>Alternative Rock</p>
+                        <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateToSetList()">
+                            <button class="btn btn-view-setlists" data-artist="coldplay">Lihat Setlist</button>
+                        </div>
+                        <script>
+                            function navigateToSetList() {
+                              window.location.href = "/setListArtist";
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="artist-card">
+                    <img src="Guest/ed.jpg" alt="Ed Sheeran" class="artist-image">
+                    <div class="artist-info">
+                        <h3>Ed Sheeran</h3>
+                        <p>Pop</p>
+                        <button class="btn btn-view-setlists" data-artist="edsheeran">Lihat Setlist</button>
+                    </div>
+                </div>
+                <div class="artist-card">
+                    <img src="Guest/taylor.jpg" alt="Taylor Swift" class="artist-image">
+                    <div class="artist-info">
+                        <h3>Taylor Swift</h3>
+                        <p>Pop</p>
+                        <button class="btn btn-view-setlists" data-artist="taylorswift">Lihat Setlist</button>
+                    </div>
+                </div>
+                <div class="artist-card">
+                    <img src="Guest/bruno.jpg" alt="Bruno Mars" class="artist-image">
+                    <div class="artist-info">
+                        <h3>Bruno Mars</h3>
+                        <p>R&B</p>
+                        <button class="btn btn-view-setlists" data-artist="brunomars">Lihat Setlist</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div id="setlist-display"></div>
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SetList Konser</h4>
+                    <p>Platform berbagi setlist konser terlengkap</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tautan Cepat</h4>
+                    <ul>
+                        <li><a href="#home">Beranda</a></li>
+                        <li><a href="#artists">Artis</a></li>
+                        <li><a href="#shows">Konser</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hubungi Kami</h4>
+                    <p>Email: support@setlistkonser.com</p>
+                    <p>Telepon: +62 812 3456 7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
+                <p>Bersama Kami, Musik Selalu Hidup</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
