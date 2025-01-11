@@ -1,88 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setlist: [[${artist}]]</title>
+    <title>SetList Konser - [[${type} == 'artist' ? ${artis} : ${show}]]</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Guest/Setlist.css">
 </head>
+
 <body>
     <!-- Navigasi -->
     <nav id="navbar">
         <div class="navbar-brand">SetList Konser</div>
         <div class="navbar-menu">
-            <!-- Beranda -->
-            <div class="portfolio-item" style="cursor: pointer; color: inherit;" onclick="navigateToBeranda()">
+            <div class="portfolio-item" onclick="navigateToBeranda()">
                 <a> Beranda </a>
             </div>
             <script>
                 function navigateToBeranda() {
-                  window.location.href = "http://localhost:8080/guest#home";
+                    window.location.href = "http://localhost:8081/guest#home";
                 }
             </script>
-            <!-- Artis -->
-            <div class="Artist" style="cursor: pointer; color: inherit;" onclick="navigateToArtist()">
+            <div class="Artist" onclick="navigateToArtist()">
                 <a> Artis </a>
             </div>
             <script>
                 function navigateToArtist() {
-                  window.location.href = "http://localhost:8080/guest#artists";
+                    window.location.href = "http://localhost:8081/guest#artists";
                 }
             </script>
-            <div class="shows" style="cursor: pointer; color: inherit;" onclick="navigateToKonser()">
+            <div class="shows" onclick="navigateToKonser()">
                 <a> Konser </a>
             </div>
             <script>
                 function navigateToKonser() {
-                  window.location.href = "http://localhost:8080/guest#shows";
+                    window.location.href = "http://localhost:8081/guest#shows";
                 }
             </script>
         </div>
     </nav>
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1 th:text="${artist} + ' Setlist'"></h1>
-        <p>Discover the ultimate setlist for your favorite artist!</p>
-    </div>
-    <!-- Main Content -->
-    <div class="container">
-        <section>
-            <h2 class="section-title">Setlist</h2>
-            <ul class="setlist">
-                <li th:each="song : ${setlist.songs}">
-                    <span class="song-title" th:text="${song.title}"></span>
-                    <span class="notes" th:text="${song.notes}"></span>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <h2 class="section-title">Albums</h2>
-            <ul class="albums">
-                <li th:each="album : ${albums}">
-                    <span th:text="${album.name}"></span>
-                    <span th:text="'(' + album.songCount + ' songs)'"></span>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <h2 class="section-title">Concert Timeline</h2>
-            <ul class="timeline">
-                <li th:each="concert : ${concertTimeline}">
-                    <div>
-                        <strong th:text="${concert.date}"></strong>
-                        <span th:text="${concert.venue}"></span>,
-                        <span th:text="${concert.city}"></span>
-                    </div>
-                    <span th:text="'Time: ' + ${concert.time}"></span>
-                </li>
-            </ul>
-        </section>
-    </div>
-    <!-- Footer -->
+
+    <!-- Section Artis -->
+    <section th:if="${type} == 'artist'">
+        <div class="hero">
+            <h1 th:text="${artis} + ' Setlist'"></h1>
+            <p>Discover the ultimate setlist for your favorite artist!</p>
+        </div>
+        <div class="container">
+            <!-- Setlist Section -->
+            <section>
+                <h2 class="section-title">Setlist</h2>
+                <ul class="setlist">
+                    <li th:each="setlist : ${setlist}">
+                        <span class="song-title" th:text="${setlist.namaLagu}"></span>
+                        <span class="notes" th:text="${setlist.showTerkait}"></span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Show Section -->
+            <section>
+                <h2 class="section-title">Shows Attended</h2>
+                <ul class="shows">
+                    <li th:each="show : ${shows}">
+                        <div>
+                            <strong th:text="${show.namaShow}"></strong>,
+                            <span th:text="${show.lokasiShow}"></span>, 
+                            <span th:text="${show.tanggalShow}"></span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </section>
+
+    <!-- Section Show -->
+    <section th:if="${type} == 'show'">
+        <div class="hero">
+            <h1 th:text="${show} + ' Details'"></h1>
+            <p>Explore the setlist and artists performing in this show!</p>
+        </div>
+        <div class="container">
+            <section>
+                <h2 class="section-title">Setlist</h2>
+                <ul class="setlist">
+                    <li th:each="setlist : ${setlist}">
+                        <span class="song-title" th:text="${setlist.namaLagu}"></span>
+                        <span class="notes" th:text="${setlist.showTerkait}"></span>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2 class="section-title">Artists</h2>
+                <ul class="artists">
+                    <li th:each="artist : ${artists}">
+                        <span class="artist-name" th:text="${artist.namaArtis}"></span>
+                        <span class="artist-genre" th:text="'(' + ${artist.genreMusik} + ')'"></span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </section>
+
     <footer style="text-align: center; padding: 1rem; background: var(--primary-color); color: var(--white);">
         <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
         <p>Bersama Kami, Musik Selalu Hidup</p>
     </footer>
 </body>
+
 </html>

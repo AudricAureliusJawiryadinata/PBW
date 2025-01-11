@@ -33,6 +33,23 @@ public class JdbcArtisRepository implements ArtisRepository {
         return jdbcTemplate.query(sql, new Object[]{"%" + name + "%"}, artisRowMapper());
     }
 
+    @Override
+    public List<Artis> findArtistsByShow(String namaShow) {
+        String sql = """
+            SELECT DISTINCT artisDupe.id, artisDupe.nama_artis, artisDupe.genre_musik
+            FROM artis artisDupe
+            JOIN setlist setlistDupe ON artisDupe.id = setlistDupe.artis_id
+            JOIN show showDupe ON setlistDupe.show_id = showDupe.id
+            WHERE LOWER(showDupe.nama_show) LIKE LOWER(CONCAT('%', ?, '%'))
+        """;
+
+        return jdbcTemplate.query(sql, new Object[]{namaShow}, (rs, rowNum) -> new Artis(
+            rs.getInt("id"),
+            rs.getString("nama_artis"),
+            rs.getString("genre_musik")
+        ));
+    }
+
     private RowMapper<Artis> artisRowMapper() {
         return (rs, rowNum) -> new Artis(
                 rs.getInt("id"),

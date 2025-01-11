@@ -9,6 +9,7 @@ import com.example.demo.Artis.*;
 public interface SetListRepository {
     void addSetlist(String namaLagu, String showTerkait, int showId, String artisTerkait, int artisId); // Tambah Setlist
     List<Setlist> findSetlistsByShowId(int showId); // Ambil Setlist berdasarkan ID Show
+    List<Setlist> findByArtistName(String artistName); //Ambil Setlist berdasarkan Nama Artis
     List<Show> findAllShows(); // Ambil semua data Show
     String getShowNameById(int showId); // Ambil nama Show berdasarkan ID
     List<Setlist> findSetlistsByArtisId(int artisId); // Ambil Setlist berdasarkan ID Artis

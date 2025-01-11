@@ -35,6 +35,17 @@ public class JdbcShowRepository implements ShowRepository {
     }
 
     @Override
+    public List<Show> findShowByArtisId(int artisId) {
+        String sql = """
+                    SELECT DISTINCT showDupe.id, showDupe.nama_show, showDupe.lokasi_show, showDupe.tanggal_show
+                    FROM show showDupe
+                    JOIN setlist setlistDupe ON showDupe.id = setlistDupe.show_id
+                    WHERE setlistDupe.artis_id = ?
+                    """;
+
+        return jdbcTemplate.query(sql, new Object[]{artisId}, showRowMapper());
+    }
+    @Override
     public List<Show> findByNameContainingIgnoreCase(String name) {
         String sql = "SELECT * FROM show WHERE LOWER(nama_show) LIKE LOWER(?)";
         return jdbcTemplate.query(sql, new Object[]{"%" + name + "%"}, showRowMapper());

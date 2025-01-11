@@ -2,6 +2,7 @@ package com.example.demo.Setlist;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.Artis.*;
@@ -59,12 +60,29 @@ public class JdbcSetlistRepository implements SetListRepository {
         return jdbcTemplate.queryForObject(sql, String.class, artisId);
     }
 
+    @Override
+    public List<Setlist> findByArtistName(String artistName) {
+        String sql = """
+            SELECT * 
+            FROM setlist
+            WHERE LOWER(artis_terkait) = LOWER(?)
+        """;
+
+        return jdbcTemplate.query(sql, new Object[]{artistName}, setlistRowMapper());
+    }
+
+    private RowMapper<Setlist> setlistRowMapper() {
+        return this::mapRowToSetlist;
+    }
+
     private Setlist mapRowToSetlist(ResultSet resultSet, int rowNum) throws SQLException {
         return new Setlist(
                 resultSet.getInt("id"),
                 resultSet.getString("nama_lagu"),
                 resultSet.getString("show_terkait"),
-                resultSet.getInt("show_id")
+                resultSet.getInt("show_id"),
+                resultSet.getString("artis_terkait"),
+                resultSet.getInt("artis_id")
         );
     }
 

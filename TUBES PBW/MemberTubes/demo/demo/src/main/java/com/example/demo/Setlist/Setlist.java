@@ -5,12 +5,16 @@ public class Setlist {
     private String namaLagu;
     private String showTerkait;
     private int showId;
+    private String artisTerkait;
+    private int artisId;
 
-    public Setlist(int id, String namaLagu, String showTerkait, int showId) {
+    public Setlist(int id, String namaLagu, String showTerkait, int showId, String artisTerkait, int artisId) {
         this.id = id;
         this.namaLagu = namaLagu;
         this.showTerkait = showTerkait;
         this.showId = showId;
+        this.artisTerkait = artisTerkait;
+        this.artisId = artisId;
     }
 
     // Getters and Setters
@@ -44,5 +48,21 @@ public class Setlist {
 
     public void setShowId(int showId) {
         this.showId = showId;
+    }
+
+    public String getArtisTerkait() {
+        return artisTerkait;
+    }
+
+    public void setArtisTerkait(String artisTerkait) {
+        this.artisTerkait = artisTerkait;
+    }
+
+    public int getArtisId() {
+        return artisId;
+    }
+
+    public void setArtisId(int artisId) {
+        this.artisId = artisId;
     }
 }
