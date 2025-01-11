@@ -132,7 +132,7 @@ public class AdminController {
         model.addAttribute("shows", shows);  // Add shows to model
     
         // Fetch all setlists
-        List<Setlist> setlists = setListRepository.findAllSetList();
+        List<Setlist> setlists = setListRepository.findAllSetlistForHistory();
         model.addAttribute("setlists", setlists);  // Add setlists to model
     
         // Return the view name "Report" that will render the generate-report.html template

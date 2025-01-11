@@ -78,6 +78,7 @@ public class JdbcMemberRepository implements MemberRepository {
     public void addArtist(String namaArtis, String genreMusik) {
         String sql = "INSERT INTO artis (nama_artis, genre_musik) VALUES (?, ?)";
         jdbcTemplate.update(sql, namaArtis, genreMusik);
+        
     }
     private Member mapRowToMember(ResultSet resultSet, int rowNum) throws SQLException {
         return new Member(

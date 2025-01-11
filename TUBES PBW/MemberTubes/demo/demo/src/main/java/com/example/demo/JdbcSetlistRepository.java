@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -35,7 +36,17 @@ public class JdbcSetlistRepository implements SetListRepository {
     
         return jdbcTemplate.query(sql, this::mapRowToSetlist);
     }
-    
+    @Override
+    public List<Setlist> findAllSetlistForHistory() {
+        String sql = "SELECT id, nama_lagu, show_terkait, nama_artis FROM setlist";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Setlist(
+                rs.getInt("id"),
+                rs.getString("nama_lagu"),
+                rs.getString("show_terkait"),
+                0, // Jika Anda tidak menggunakan showId untuk fitur ini
+                rs.getString("nama_artis")
+        ));
+    }
     private Setlist mapRowToSetlist(ResultSet resultSet, int rowNum) throws SQLException {
         return new Setlist(
                 resultSet.getInt("id"),
@@ -45,8 +56,23 @@ public class JdbcSetlistRepository implements SetListRepository {
                 resultSet.getString("nama_artis")  // This fetches the artist's name correctly
         );
     }
-    
-    
+    @Override
+    public Setlist findById(int id) {
+        String sql = "SELECT * FROM setlist WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, this::mapRowToSetlist, id);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Kembalikan null jika data tidak ditemukan
+        }
+    }
+
+
+    @Override
+    public void save(Setlist setlist) {
+        String sql = "UPDATE setlist SET nama_lagu = ?, show_terkait = ?, nama_artis = ? WHERE id = ?";
+        jdbcTemplate.update(sql, setlist.getNamaLagu(), setlist.getShowTerkait(), setlist.getNamaArtis(), setlist.getId());
+    }
+
     @Override
     public List<Show> findAllShows() {
         String sql = "SELECT * FROM show";

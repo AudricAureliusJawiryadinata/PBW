@@ -166,30 +166,46 @@ public class MemberController {
     /**
      * Menampilkan halaman MemberHistory.html
      */
+    // @GetMapping("/MemberHistory")
+    // public String showMemberHistoryPage() {
+    //     return "MemberHistory"; // Mengarahkan ke MemberHistory.html
+    // }
     @GetMapping("/MemberHistory")
-    public String showMemberHistoryPage() {
-        return "MemberHistory"; // Mengarahkan ke MemberHistory.html
+    public String showMemberHistoryPage(Model model) {
+        // Ambil data langsung dari tabel setlist
+        List<Setlist> setlists = setlistRepository.findAllSetlistForHistory();
+    
+        // Debug log untuk memastikan data
+        setlists.forEach(setlist ->
+            System.out.println("Setlist: " + setlist.getNamaLagu() +
+                               ", Show: " + setlist.getShowTerkait() +
+                               ", Artist: " + setlist.getNamaArtis())
+        );
+    
+        // Kirim data ke view
+        model.addAttribute("setlists", setlists);
+        return "MemberHistory";
     }
-
+    
     /**
      * Memproses login dan memvalidasi username & password
      */
     @PostMapping("/login")
-public String handleLogin(@RequestParam String username,
-                          @RequestParam String password,
-                          HttpSession session,  // Menambahkan HttpSession untuk menyimpan data sesi
-                          RedirectAttributes redirectAttributes) {
-    // Validasi username dan password menggunakan repository
-    if (memberRepository.isValidUser(username, password)) {
-        // Menyimpan username dalam sesi setelah login berhasil
-        session.setAttribute("username", username);
-        return "redirect:/MemberAddArtist"; // Jika valid, arahkan ke halaman MemberAddArtist
-    }
+    public String handleLogin(@RequestParam String username,
+                            @RequestParam String password,
+                            HttpSession session,  // Menambahkan HttpSession untuk menyimpan data sesi
+                            RedirectAttributes redirectAttributes) {
+        // Validasi username dan password menggunakan repository
+        if (memberRepository.isValidUser(username, password)) {
+            // Menyimpan username dalam sesi setelah login berhasil
+            session.setAttribute("username", username);
+            return "redirect:/MemberAddArtist"; // Jika valid, arahkan ke halaman MemberAddArtist
+        }
 
-    // Jika tidak valid, tambahkan pesan error sebagai query parameter
-    redirectAttributes.addAttribute("error", "Username atau password salah.");
-    return "redirect:/member/loginmember"; // Redirect ke halaman login yang benar
-}
+        // Jika tidak valid, tambahkan pesan error sebagai query parameter
+        redirectAttributes.addAttribute("error", "Username atau password salah.");
+        return "redirect:/member/loginmember"; // Redirect ke halaman login yang benar
+    }
 
 
     /**
@@ -282,7 +298,56 @@ public String handleLogin(@RequestParam String username,
         writer.flush();
         writer.close();
     }
+
     
+    @GetMapping("/editSetlist")
+    public String editSetlist(@RequestParam int id, Model model) {
+        // Ambil data setlist berdasarkan ID
+        Setlist setlist = setlistRepository.findById(id);
+        if (setlist == null) {
+            throw new RuntimeException("Setlist tidak ditemukan");
+        }
+    
+        // Ambil daftar artis dari repository
+        List<Artist> artisList = artistRepository.findAllArtists();
+    
+        // Tambahkan data ke model
+        model.addAttribute("setlist", setlist);
+        model.addAttribute("artisList", artisList); // Data artis untuk dropdown
+    
+        return "edit"; // Nama file HTML
+    }
+    
+    @PostMapping("/updateSetlist")
+    public String updateSetlist(@RequestParam int id,
+                                 @RequestParam String namaLagu,
+                                 @RequestParam String showTerkait,
+                                 @RequestParam String namaArtis,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            // Cari setlist berdasarkan ID
+            Setlist setlist = setlistRepository.findById(id);
+            if (setlist == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Setlist tidak ditemukan.");
+                return "redirect:/MemberHistory";
+            }
+    
+            // Update data
+            setlist.setNamaLagu(namaLagu);
+            setlist.setShowTerkait(showTerkait);
+            setlist.setNamaArtis(namaArtis);
+    
+            // Simpan perubahan ke repository
+            setlistRepository.save(setlist);
+    
+            // Pesan sukses
+            redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil diperbarui!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal memperbarui setlist: " + e.getMessage());
+            e.printStackTrace(); // Debug error ke console
+        }
+        return "redirect:/MemberHistory";
+    }    
     
 }
 

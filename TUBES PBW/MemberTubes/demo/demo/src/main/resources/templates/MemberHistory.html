@@ -5,6 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History Perubahan - SetList Konser</title>
     <link rel="stylesheet" href="/Member/styles.css">
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn-edit {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .btn-edit:hover {
+            background-color: #45a049;
+        }
+    </style>
+
+    <script>
+        function showTable() {
+            const reportType = document.getElementById('report-type').value;
+            const setlistSummaryTable = document.getElementById('setlist-summary');
+            const otherTables = document.querySelectorAll('.report-table');
+
+            // Sembunyikan semua tabel
+            otherTables.forEach(table => table.style.display = 'none');
+
+            // Tampilkan tabel sesuai pilihan
+            if (reportType === 'setlist-summary') {
+                setlistSummaryTable.style.display = 'table';
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="wrapper">
@@ -15,21 +70,35 @@
                 <li><a href="/MemberAddArtist">Tambah Artis</a></li>
                 <li><a href="/MemberAddShow">Tambah Show</a></li>
                 <li><a href="/MemberAddSetlist">Tambah Setlist</a></li>
-                <li><a href="/MemberKomentar">Komentar & Koreksi</a></li>
-                <li><a href="/MemberHistory">History Perubahan</a></li>
+                <li><a href="/MemberKomentar">Komentar</a></li>
+                <li><a href="/MemberHistory">Edit Perubahan</a></li>
             </ul>
             <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
         <main class="content">
-        <h1>History Perubahan</h1>
-        <ul>
-            <li>
-                <p><strong>2024-12-01</strong>: Artis "A" ditambahkan oleh user123</p>
-            </li>
-            <!-- History lainnya bisa ditambahkan di sini -->
-        </ul>
-    </main>
+            <h1>Edit Perubahan</h1>
+            <table id="setlist-summary" class="report-table" style="display: table;">
+                <thead>
+                    <tr>
+                        <th>Nama Lagu</th>
+                        <th>Show Terkait</th>
+                        <th>Nama Artis</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="setlist : ${setlists}">
+                        <td th:text="${setlist.namaLagu}"></td>
+                        <td th:text="${setlist.showTerkait}"></td>
+                        <td th:text="${setlist.namaArtis}"></td> <!-- Nama artis langsung dari tabel setlist -->
+                        <td>
+                            <a th:href="'/editSetlist?id=' + ${setlist.id}" class="btn-edit">Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+                
+            </table>
+        </main>
     </div>
-    
 </body>
 </html>
