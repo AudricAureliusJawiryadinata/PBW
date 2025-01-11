@@ -21,7 +21,7 @@ import com.example.demo.Show.Show;
 import com.example.demo.Show.ShowRepository;
 
 @Controller
-public class guestController {
+public class GuestController {
 
     @Autowired
     private SetListRepository setListRepository;
