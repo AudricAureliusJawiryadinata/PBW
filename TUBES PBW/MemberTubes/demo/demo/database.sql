@@ -47,16 +47,6 @@ CREATE TABLE setlist (
     FOREIGN KEY (artist_id) REFERENCES artis (id)
 );
 
-
-CREATE TABLE song (
-    id SERIAL PRIMARY KEY,
-    nama_lagu VARCHAR(255) NOT NULL,
-	setlist_id INT NOT NULL,
-    artis_id INT NOT NULL,
-    FOREIGN KEY (setlist_id) REFERENCES setlist (id),
-    FOREIGN KEY (artis_id) REFERENCES artis (id)
-);
-
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,             -- Unique ID for each comment
     show_id INT NOT NULL,              -- Foreign key referencing show
