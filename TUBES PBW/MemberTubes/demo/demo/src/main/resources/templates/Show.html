@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetList Konser - Daftar Show</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Guest/Setlist.css">
+</head>
+
+<body>
+    <!-- Navigasi -->
+    <nav id="navbar">
+        <a href="/guest" class="navbar-brand">SetList Konser</a>
+        <div class="navbar-menu">
+            <a href="/guest">Beranda</a>
+            <a href="/artis">Artis</a>
+            <a href="/show">Konser</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Daftar Show</h1>
+        <p>Explore all the shows available in the database!</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <section>
+            <h2 class="section-title">Shows</h2>
+            <ul class="shows">
+                <li th:each="show : ${shows}">
+                    <div>
+                        <strong th:text="${show.namaShow}"></strong>,
+                        <span th:text="${show.lokasiShow}"></span>,
+                        <span th:text="${show.tanggalShow}"></span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <footer style="text-align: center; padding: 1rem; background: var(--primary-color); color: var(--white);">
+        <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
+        <p>Bersama Kami, Musik Selalu Hidup</p>
+    </footer>
+</body>
+
+</html>

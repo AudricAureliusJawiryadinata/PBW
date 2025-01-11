@@ -124,4 +124,18 @@ public class guestController {
         return "SetListArtist";
     }
 
+    @GetMapping("/artis")
+public String getAllArtists(Model model) {
+    List<Artis> artists = artistRepository.findAllArtists();
+    model.addAttribute("artists", artists);
+    return "artis"; // Mengarah ke artis.html
+}
+
+@GetMapping("/show")
+public String getAllShows(Model model) {
+    List<Show> shows = showRepository.findAllShows();
+    model.addAttribute("shows", shows);
+    return "show"; // Mengarah ke show.html
+}
+
 }
