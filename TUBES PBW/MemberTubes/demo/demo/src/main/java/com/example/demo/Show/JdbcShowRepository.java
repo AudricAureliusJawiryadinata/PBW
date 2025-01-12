@@ -32,6 +32,12 @@ public class JdbcShowRepository implements ShowRepository {
     public Show findShowById(int showId) {
         String sql = "SELECT * FROM show WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, this::mapRowToShow, showId);
+    } 
+
+    @Override
+    public List<Show> findByNameContainingIgnoreCase(String name) {
+        String sql = "SELECT * FROM show WHERE LOWER(nama_show) LIKE LOWER(?)";
+        return jdbcTemplate.query(sql, new Object[]{"%" + name + "%"}, showRowMapper());
     }
 
     @Override
@@ -40,15 +46,10 @@ public class JdbcShowRepository implements ShowRepository {
                     SELECT DISTINCT showDupe.id, showDupe.nama_show, showDupe.lokasi_show, showDupe.tanggal_show
                     FROM show showDupe
                     JOIN setlist setlistDupe ON showDupe.id = setlistDupe.show_id
-                    WHERE setlistDupe.artis_id = ?
+                    WHERE setlistDupe.artist_id = ?
                     """;
 
         return jdbcTemplate.query(sql, new Object[]{artisId}, showRowMapper());
-    }
-    @Override
-    public List<Show> findByNameContainingIgnoreCase(String name) {
-        String sql = "SELECT * FROM show WHERE LOWER(nama_show) LIKE LOWER(?)";
-        return jdbcTemplate.query(sql, new Object[]{"%" + name + "%"}, showRowMapper());
     }
 
     private RowMapper<Show> showRowMapper() {

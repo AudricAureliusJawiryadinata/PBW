@@ -2,8 +2,8 @@ package com.example.demo.Guest;
 
 import java.util.List;
 
+import com.example.demo.Artis.Artis;
 import com.example.demo.Show.*;
-import com.example.demo.Artis.*;
 
 public interface GuestRepository {
     List<Show> findShowByName(String namaShow);

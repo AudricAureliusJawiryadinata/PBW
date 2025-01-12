@@ -21,9 +21,12 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <h1>Daftar Artis</h1>
-        <p>Explore all the artists available in the database!</p>
+    <section id="home" class="hero">
+        <img src="/Guest/background-image.jpg" alt="Background Image">
+        <div class="hero-content">
+            <h1>Daftar Artis</h1>
+            <p>Explore all the artists available!</p>
+        </div>
     </section>
 
     <!-- Main Content -->
@@ -32,18 +35,43 @@
             <h2 class="section-title">Artists</h2>
             <ul class="artists">
                 <li th:each="artist : ${artists}">
-                    <div>
-                        <strong th:text="${artist.namaArtis}"></strong>
-                        <span th:text="'(' + ${artist.genreMusik} + ')'"></span>
-                    </div>
+                    <form action="/setListArtist" method="post" class="clickable-item-form">
+                        <input type="hidden" name="type" value="artist">
+                        <input type="hidden" th:name="name" th:value="${artist.namaArtis}">
+                        <button type="submit" class="button-as-link">
+                            <strong th:text="${artist.namaArtis}"></strong>
+                            <span th:text="'(' + ${artist.genreMusik} + ')'"></span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </section>
     </div>
 
-    <footer style="text-align: center; padding: 1rem; background: var(--primary-color); color: var(--white);">
-        <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
-        <p>Bersama Kami, Musik Selalu Hidup</p>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SetList Konser</h4>
+                <p>Platform berbagi setlist konser terlengkap</p>
+            </div>
+            <div class="footer-section">
+                <h4>Tautan Cepat</h4>
+                <ul>
+                    <li><a href="/guest">Beranda</a></li>
+                    <li><a href="/artis">Artis</a></li>
+                    <li><a href="/show">Konser</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Hubungi Kami</h4>
+                <p>Email: support@setlistkonser.com</p>
+                <p>Telepon: +62 812 3456 7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SetList Konser - Semua Hak Dilindungi</p>
+            <p>Bersama Kami, Musik Selalu Hidup</p>
+        </div>
     </footer>
 </body>
 

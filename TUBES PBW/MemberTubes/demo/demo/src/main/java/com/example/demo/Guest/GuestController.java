@@ -1,5 +1,7 @@
 package com.example.demo.Guest;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -14,14 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.Artis.Artis;
-import com.example.demo.Artis.ArtisRepository;
+import com.example.demo.Artis.*;
+import com.example.demo.Comment.*;
 import com.example.demo.Setlist.*;
 import com.example.demo.Show.Show;
 import com.example.demo.Show.ShowRepository;
 
 @Controller
-public class guestController {
+public class GuestController {
 
     @Autowired
     private SetListRepository setListRepository;
@@ -31,6 +33,9 @@ public class guestController {
 
     @Autowired
     private ArtisRepository artistRepository;
+
+    @Autowired
+    private CommentsRepository commentsRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -80,14 +85,14 @@ public class guestController {
         if ("artist".equalsIgnoreCase(type)) {
             // Jika type adalah artis
             Artis selectedArtist = artistRepository.findByNameContainingIgnoreCase(name).get(0);
-            List<Setlist> setlists = setListRepository.findByArtistName(selectedArtist.getNamaArtis());
+            List<com.example.demo.Setlist.Setlist> setlists = setListRepository.findByArtistName(selectedArtist.getNamaArtis());
             model.addAttribute("type", "artist");
             model.addAttribute("artis", selectedArtist.getNamaArtis());
             model.addAttribute("setlist", setlists);
         } else if ("show".equalsIgnoreCase(type)) {
             // Jika type adalah show
             Show selectedShow = showRepository.findByNameContainingIgnoreCase(name).get(0);
-            List<Setlist> setlists = setListRepository.findSetlistsByShowId(selectedShow.getId());
+            List<com.example.demo.Setlist.Setlist> setlists = setListRepository.findSetlistsByShowId(selectedShow.getId());
             List<Artis> artists = artistRepository.findArtistsByShow(selectedShow.getNamaShow());
             model.addAttribute("type", "show");
             model.addAttribute("show", selectedShow.getNamaShow());
@@ -103,39 +108,91 @@ public class guestController {
             // Dapatkan artis berdasarkan nama
             Artis selectedArtist = artistRepository.findByNameContainingIgnoreCase(name).get(0);
             // Dapatkan setlist berdasarkan artis
-            List<Setlist> setlists = setListRepository.findByArtistName(selectedArtist.getNamaArtis());
+            List<com.example.demo.Setlist.Setlist> setlists = setListRepository.findByArtistName(selectedArtist.getNamaArtis());
             // Dapatkan show yang dihadiri artis
             List<Show> shows = showRepository.findShowByArtisId(selectedArtist.getId());
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+            List<Map<String, String>> formattedShows = shows.stream()
+                    .map(show -> Map.of(
+                            "id", String.valueOf(show.getId()),
+                            "namaShow", show.getNamaShow(),
+                            "lokasiShow", show.getLokasiShow(),
+                            "tanggalShow", show.getTanggalShow().format(formatter) // Format tanggal
+                    ))
+                    .toList();
 
             model.addAttribute("type", "artist");
             model.addAttribute("artis", selectedArtist.getNamaArtis());
             model.addAttribute("setlist", setlists);
-            model.addAttribute("shows", shows);
+            model.addAttribute("shows", formattedShows);
         } else if ("show".equalsIgnoreCase(type)) {
-            // Jika type adalah show
             Show selectedShow = showRepository.findByNameContainingIgnoreCase(name).get(0);
-            List<Setlist> setlists = setListRepository.findSetlistsByShowId(selectedShow.getId());
-            List<Artis> artists = artistRepository.findArtistsByShow(selectedShow.getNamaShow());
-            model.addAttribute("type", "show");
-            model.addAttribute("show", selectedShow.getNamaShow());
-            model.addAttribute("setlist", setlists);
-            model.addAttribute("artists", artists);
+        List<com.example.demo.Setlist.Setlist> setlists = setListRepository.findSetlistsByShowId(selectedShow.getId());
+        List<Artis> artists = artistRepository.findArtistsByShow(selectedShow.getNamaShow());
+
+        // Ambil komentar terkait show
+        List<Comment> comments = commentsRepository.findByShowId(selectedShow.getId());
+
+        // Format komentar dengan waktu relatif
+        List<Map<String, String>> formattedComments = comments.stream()
+            .map(comment -> {
+                String relativeTime = calculateTimeAgo(comment.getCreatedAt().toLocalDateTime());
+                return Map.of(
+                    "memberId", String.valueOf(comment.getMemberId()),
+                    "commentText", comment.getCommentText(),
+                    "createdAt", relativeTime
+                );
+            })
+            .toList();
+
+        model.addAttribute("type", "show");
+        model.addAttribute("show", selectedShow.getNamaShow());
+        model.addAttribute("setlist", setlists);
+        model.addAttribute("artists", artists);
+        model.addAttribute("comments", formattedComments);
         }
         return "SetListArtist";
     }
+    private String calculateTimeAgo(LocalDateTime createdAt) {
+    LocalDateTime now = LocalDateTime.now();
+    Duration duration = Duration.between(createdAt, now);
+
+    if (duration.toSeconds() < 60) {
+        return duration.toSeconds() + " seconds ago";
+    } else if (duration.toMinutes() < 60) {
+        return duration.toMinutes() + " minutes ago";
+    } else if (duration.toHours() < 24) {
+        return duration.toHours() + " hours ago";
+    } else if (duration.toDays() < 7) {
+        return duration.toDays() + " days ago";
+    } else {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+        return "on " + createdAt.format(formatter);
+    }
+}
 
     @GetMapping("/artis")
 public String getAllArtists(Model model) {
     List<Artis> artists = artistRepository.findAllArtists();
     model.addAttribute("artists", artists);
-    return "artis"; // Mengarah ke artis.html
+    return "Artis"; // Mengarah ke artis.html
 }
 
 @GetMapping("/show")
 public String getAllShows(Model model) {
     List<Show> shows = showRepository.findAllShows();
-    model.addAttribute("shows", shows);
-    return "show"; // Mengarah ke show.html
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+            List<Map<String, String>> formattedShows = shows.stream()
+                    .map(show -> Map.of(
+                            "id", String.valueOf(show.getId()),
+                            "namaShow", show.getNamaShow(),
+                            "lokasiShow", show.getLokasiShow(),
+                            "tanggalShow", show.getTanggalShow().format(formatter) // Format tanggal
+                    ))
+                    .toList();
+    model.addAttribute("shows", formattedShows);
+    return "Show"; // Mengarah ke show.html
 }
 
 }

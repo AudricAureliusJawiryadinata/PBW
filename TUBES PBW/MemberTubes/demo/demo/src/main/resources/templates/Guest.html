@@ -32,14 +32,14 @@
 
         <!-- Pencarian Setlist -->
         <section id="search-section" class="search-section">
-            <h2>Temukan Setlist</h2>
+            <h2>Temukan Artis dan Show</h2>
             <!-- Jika pencarian tidak ditemukan -->
             <p th:if="${error}" th:text="${error}" style="color: red;"></p>
             <form action="/search" method="post">
                 <div class="search-container">
                     <!-- Input tunggal untuk mencari artis atau show -->
                     <input type="text" name="query" id="search-input" placeholder="Cari Artis atau Show">
-                    <button type="submit" id="search-btn" class="btn btn-search">Cari</button>
+                    <button type="submit" id="search-btn" class="btn-search">Cari</button>
                 </div>
             </form>
         </section>

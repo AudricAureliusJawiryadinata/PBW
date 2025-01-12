@@ -32,35 +32,29 @@
         }
     </style>
     <script>
-        // JavaScript untuk menampilkan tabel berdasarkan pilihan
         function showTable() {
-        const reportType = document.getElementById('report-type').value;
-        const userActivityTable = document.getElementById('user-activity-table');
-        const showSummaryTable = document.getElementById('show-summary'); // Tambahkan referensi untuk tabel show-summary
-        const otherTables = document.querySelectorAll('.report-table');
+            const reportType = document.getElementById('report-type').value;
+            const userActivityTable = document.getElementById('user-activity-table');
+            const showSummaryTable = document.getElementById('show-summary');
+            const setlistSummaryTable = document.getElementById('setlist-summary');
+            const otherTables = document.querySelectorAll('.report-table');
 
-        // Sembunyikan semua tabel terlebih dahulu
-        otherTables.forEach(table => table.style.display = 'none');
+            otherTables.forEach(table => table.style.display = 'none');
 
-        // Tampilkan tabel "user-activity" jika opsi dipilih
-        if (reportType === 'user-activity') {
-        userActivityTable.style.display = 'table';
+            if (reportType === 'user-activity') {
+                userActivityTable.style.display = 'table';
+            }
+            if (reportType === 'show-summary') {
+                showSummaryTable.style.display = 'table';
+            }
+            if (reportType === 'setlist-summary') {
+                setlistSummaryTable.style.display = 'table';
+            }
         }
-        // Tampilkan tabel "show-summary" jika opsi "Ringkasan Show" dipilih
-        if (reportType === 'show-summary') {
-        showSummaryTable.style.display = 'table';
-        }
-}
-
-
-        
     </script>
-
-    
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <h2>Dashboard Admin</h2>
             <ul>
@@ -73,7 +67,6 @@
             <button onclick="location.href='/logout'" class="btn-logout">Logout</button>
         </aside>
 
-        <!-- Konten Utama -->
         <main class="content">
             <h1>Laporan</h1>
             <form>
@@ -87,7 +80,7 @@
             </form>
 
             <!-- Tabel Aktivitas Pengguna -->
-            <table id="user-activity-table" class="report-table" border="1" style="display: none;">
+            <table id="user-activity-table" class="report-table" style="display: none;">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -95,25 +88,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Loop untuk menampilkan data pengguna -->
                     <tr th:each="member : ${members}">
                         <td th:text="${member.username}"></td>
-                        <td th:text="${member.password}"></td> <!-- Tampilkan email -->
+                        <td th:text="${member.password}"></td>
                     </tr>
                 </tbody>
             </table>
 
-            <!-- Tabel lainnya (sebagai placeholder) -->
-            <table id="show-summary" class="report-table" border="1" style="display: none;">
+            <!-- Tabel Ringkasan Setlist -->
+            <table id="setlist-summary" class="report-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Nama Lagu</th>
+                        <th>Show Terkait</th>
+                        <th>Nama Artis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="setlist : ${setlists}">
+                        <td th:text="${setlist.namaLagu}"></td>
+                        <td th:text="${setlist.showTerkait}"></td>
+                        <td th:text="${setlist.namaArtis}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tabel Ringkasan Show -->
+            <table id="show-summary" class="report-table" style="display: none;">
                 <thead>
                     <tr>
                         <th>Show</th>
-                        <th>lokasi Show</th>
+                        <th>Lokasi Show</th>
                         <th>Tanggal Show</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Loop untuk menampilkan semua data show -->
                     <tr th:each="show : ${shows}">
                         <td th:text="${show.namaShow}"></td>
                         <td th:text="${show.lokasiShow}"></td>
@@ -121,8 +130,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            
         </main>
     </div>
 </body>

@@ -34,6 +34,9 @@ implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation ("jakarta.persistence:jakarta.persistence-api:3.1.0")
+	implementation("com.itextpdf:itext7-core:7.2.4")
+	implementation("javax.servlet:javax.servlet-api:4.0.1")
 }
 
 tasks.withType<Test> {

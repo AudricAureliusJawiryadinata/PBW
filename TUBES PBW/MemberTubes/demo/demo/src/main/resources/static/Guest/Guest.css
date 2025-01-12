@@ -13,11 +13,25 @@
     box-sizing: border-box;
 }
 
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     background-color: var(--background-color);
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1; /* Mengisi ruang yang tersisa antara header dan footer */
+    margin-bottom: 2rem; /* Jarak antara kontainer dan footer */
 }
 
 /* Navbar */
@@ -36,7 +50,6 @@ body {
     font-weight: bold;
     color: var(--primary-color);
 }
-
 
 .navbar-menu {
     display: flex;
@@ -104,12 +117,26 @@ body {
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    color: white; /* Warna teks utama */
+    text-shadow: 
+        1px 1px 0 black,   /* Bayangan kanan-bawah */
+        -1px -1px 0 black, /* Bayangan kiri-atas */
+        -1px 1px 0 black,  /* Bayangan kiri-bawah */
+        1px -1px 0 black;  /* Bayangan kanan-atas */
+    font-size: 3rem; /* Ukuran teks */
+    font-weight: bold; /* Teks tebal */
     margin-bottom: 20px;
 }
 
 .hero-content p {
-    font-size: 1.5rem;
+    color: white; /* Warna teks utama */
+    text-shadow: 
+        1px 1px 0 black,   /* Bayangan kanan-bawah */
+        -1px -1px 0 black, /* Bayangan kiri-atas */
+        -1px 1px 0 black,  /* Bayangan kiri-bawah */
+        1px -1px 0 black;  /* Bayangan kanan-atas */
+    font-size: 1,5rem; /* Ukuran teks */
+    font-weight: bold; /* Teks tebal */
     margin-bottom: 30px;
 }
 
@@ -291,6 +318,21 @@ body {
     box-shadow: 0 0 5px var(--primary-color);
 }
 
+.button-as-link {
+    background: none;
+    color: var(--text-color);
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-as-link:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
 .btn {
     display: block;
     width: 100%;
@@ -369,6 +411,7 @@ body {
     background-color: var(--text-color);
     color: var(--white);
     padding: 2rem 5%;
+    margin-top: 1rem;
 }
 
 .footer-content {
@@ -379,6 +422,10 @@ body {
 .footer-section {
     flex: 1;
     margin-right: 1rem;
+}
+.footer-section a{
+    color:var(--primary-color);
+    text-decoration:none;
 }
 
 .footer-bottom {

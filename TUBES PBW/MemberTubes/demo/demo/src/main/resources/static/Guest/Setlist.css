@@ -2,17 +2,53 @@
 :root {
     --primary-color: #3498db;
     --secondary-color: black;
+    --third-color: #2ecc71;
     --background-color: #f4f4f9;
     --text-color: #333;
     --white: #ffffff;
     --light-gray: #f7f7f7;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background-color: var(--background-color);
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Tinggi minimal sesuai viewport */
+}
+/* Tombol Umum */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.btn-register {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
 }
 
 /* Navbar */
@@ -26,6 +62,7 @@ body {
 }
 
 .navbar-brand {
+    text-decoration: none;
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary-color);
@@ -73,12 +110,26 @@ body {
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    color: white; /* Warna teks utama */
+    text-shadow: 
+        1px 1px 0 black,   /* Bayangan kanan-bawah */
+        -1px -1px 0 black, /* Bayangan kiri-atas */
+        -1px 1px 0 black,  /* Bayangan kiri-bawah */
+        1px -1px 0 black;  /* Bayangan kanan-atas */
+    font-size: 3rem; /* Ukuran teks */
+    font-weight: bold; /* Teks tebal */
     margin-bottom: 20px;
 }
 
 .hero-content p {
-    font-size: 1.5rem;
+    color: white; /* Warna teks utama */
+    text-shadow: 
+        1px 1px 0 black,   /* Bayangan kanan-bawah */
+        -1px -1px 0 black, /* Bayangan kiri-atas */
+        -1px 1px 0 black,  /* Bayangan kiri-bawah */
+        1px -1px 0 black;  /* Bayangan kanan-atas */
+    font-size: 1,5rem; /* Ukuran teks */
+    font-weight: bold; /* Teks tebal */
     margin-bottom: 30px;
 }
 
@@ -99,15 +150,58 @@ body {
 .hero-actions {
     margin-top: 2rem;
 }
+
+/* Pencarian */
+.search-section {
+    padding: 3rem 5%;
+    background-color: var(--background-color);
+}
+
+.search-container {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.search-input, #search-input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+}
+
+.search-filters {
+    display: flex;
+    gap: 1rem;
+}
+
+.search-filters select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
 /* Main Content */
 .container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: var(--white);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Isi penuh ruang yang tersedia */
+    max-width: 1200px; /* Tetap sama */
+    margin: 2rem auto; /* Tetap di tengah */
+    padding: 2rem; /* Ruang dalam tetap */
+    background: var(--white); /* Latar belakang putih */
+    border-radius: 8px; /* Sudut melengkung */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+    flex: 1; /* Pastikan mengisi ruang kosong di halaman */
 }
+form{
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none; /* Menghilangkan simbol di kiri */
+    margin: 0; /* Menghapus margin default */
+    padding: 0; /* Menghapus padding default */
+}
+
 .section-title {
     font-size: 1.8rem;
     color: var(--primary-color);
@@ -115,18 +209,29 @@ body {
     border-bottom: 2px solid var(--primary-color);
     display: inline-block;
 }
-.setlist, .albums, .timeline {
+.setlist, .artists, .shows, .comments {
     list-style: none;
     padding: 0;
 }
-.setlist li, .albums li, .timeline li {
+.setlist li, .artists li, .shows li {
     padding: 1rem;
     border-bottom: 1px solid var(--light-gray);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.setlist li:last-child, .albums li:last-child, .timeline li:last-child {
+.comments li{
+    padding-left: 1rem;
+    padding-right: 0;
+    border-bottom: 1px solid var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.setlist li:last-child, .artists li:last-child, .shows li:last-child, .comments li:last-child {
+    margin-bottom: 0;
     border-bottom: none;
 }
 .song-title {
@@ -134,8 +239,12 @@ body {
     font-size: 1.2rem;
 }
 .notes {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--secondary-color);
+}
+.show-title {
+    font-weight: 500;
+    font-size: 1.2rem;
 }
 .button {
     display: inline-block;
@@ -157,7 +266,7 @@ body {
         flex-direction: column;
         align-items: flex-start;
     }
-    .setlist li, .albums li, .timeline li {
+    .setlist li, .artists li, .shows li {
         flex-direction: column;
         align-items: flex-start;
     }
@@ -178,12 +287,191 @@ body {
     text-decoration: underline;
 }
 
+.clickable-item-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.button-as-link {
+    background: none;
+    color: var(--secondary-color);
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-as-link:hover {
+    color: var(--third-color);
+    text-decoration: none;
+}
+
+.button-as-link strong {
+    font-size: 1.2rem; /* Atur ukuran teks pada strong */
+    font-weight: bold; /* Tetap tebal */
+}
+
+.button-as-link span {
+    font-size: 1rem; /* Atur ukuran teks pada span */
+    font-weight: normal; /* Tetap normal */
+    color: var(--secondary-color); /* Pilihan warna jika diperlukan */
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.5s;
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    animation: slideIn 0.4s ease-out;
+}
+
+.close-modal {
+    color: var(--text-color);
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-container {
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 1rem;
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.form-container p {
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(45deg, var(--primary-color), var(--third-color));
+    color: var(--white);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background: linear-gradient(45deg, var(--third-color), var(--primary-color));
+}
+
+/* Tombol Cari */
+.btn-search {
+    padding: 0.5rem 1.2rem; /* Ukuran tombol normal */
+    font-size: 16px; /* Ukuran font normal */
+    border-radius: 4px; /* Tepi membulat */
+    background-color: var(--primary-color); /* Warna utama */
+    color: var(--white);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 150px; /* Batas maksimum lebar tombol */
+    width: auto; /* Ukuran otomatis sesuai teks */
+}
+
+.btn-search:hover {
+    background-color: var(--third-color); /* Warna saat hover */
+}
+
+
+
+.form-footer {
+    margin-top: 1rem;
+    color: #666;
+}
+
+.form-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 
 /* Footer */
 .site-footer {
     background-color: var(--text-color);
     color: var(--white);
     padding: 2rem 5%;
+    margin-top: auto;
 }
 
 .footer-content {
@@ -194,6 +482,11 @@ body {
 .footer-section {
     flex: 1;
     margin-right: 1rem;
+}
+
+.footer-section a{
+    color:var(--primary-color);
+    text-decoration:none;
 }
 
 .footer-bottom {

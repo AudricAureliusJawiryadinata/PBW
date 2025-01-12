@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SetList Konser - [[${artist}]]</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Guest/Guest.css">
+    <link rel="stylesheet" href="/Guest/Setlist.css">
 </head>
 <body>
     <!-- Navigasi -->
@@ -27,14 +27,14 @@
     </section>
     <!-- Pencarian Setlist -->
     <section id="search-section" class="search-section">
-        <h2>Temukan Setlist</h2>
+        <h2>Temukan Artis dan Show</h2>
         <!-- Jika pencarian tidak ditemukan -->
         <p th:if="${error}" th:text="${error}" style="color: red;"></p>
         <form action="/search" method="post">
             <div class="search-container">
                 <!-- Input tunggal untuk mencari artis atau show -->
                 <input type="text" name="query" id="search-input" placeholder="Cari Artis atau Show">
-                <button type="submit" id="search-btn" class="btn btn-search">Cari</button>
+                <button type="submit" id="search-btn" class="btn-search">Cari</button>
             </div>
         </form>
     </section>
@@ -48,7 +48,7 @@
                     <form action="/setListArtist" method="post" class="clickable-item-form">
                         <input type="hidden" name="type" value="show">
                         <input type="hidden" th:name="name" th:value="${show.namaShow}">
-                        <button type="submit" class="clickable-item">
+                        <button type="submit" class="button-as-link">
                             <strong th:text="${show.lokasiShow}"></strong>, 
                             <span th:text="${show.tanggalShow}"></span>
                         </button>
@@ -67,7 +67,7 @@
                     <form action="/setListArtist" method="post" class="clickable-item-form">
                         <input type="hidden" name="type" value="artist">
                         <input type="hidden" th:name="name" th:value="${artist.namaArtis}">
-                        <button type="submit" class="clickable-item">
+                        <button type="submit" class="button-as-link">
                             <strong th:text="${artist.namaArtis}"></strong>
                             <span th:text="'(' + ${artist.genreMusik} + ')'"></span>
                         </button>
@@ -89,8 +89,8 @@
                 <h4>Tautan Cepat</h4>
                 <ul>
                     <li><a href="/guest">Beranda</a></li>
-                        <li><a href="/artis">Artis</a></li>
-                        <li><a href="/show">Konser</a></li>
+                    <li><a href="/artis">Artis</a></li>
+                    <li><a href="/show">Konser</a></li>
                 </ul>
             </div>
             <div class="footer-section">

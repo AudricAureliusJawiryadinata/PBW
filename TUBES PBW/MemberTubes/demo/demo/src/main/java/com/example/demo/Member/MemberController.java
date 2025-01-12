@@ -5,29 +5,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Artis.Artis;
 import com.example.demo.Artis.ArtisRepository;
+import com.example.demo.Comment.Comment;
+import com.example.demo.Comment.CommentsService;
 import com.example.demo.Setlist.JdbcSetlistRepository;
 import com.example.demo.Setlist.SetListRepository;
-import com.example.demo.Show.Show;
-import com.example.demo.Show.ShowRepository;
 
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.demo.Setlist.Setlist;
+import com.example.demo.Show.Show;
+import com.example.demo.Show.ShowRepository;
 
-import java.time.LocalDate;
+import java.io.IOException;
+import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class MemberController {
 
@@ -81,31 +82,37 @@ public class MemberController {
 
     @GetMapping("/MemberAddSetlist")
     public String showAddSetlistForm(Model model) {
-        // Ambil daftar artis dan show dari database
+        // Fetch all artists and shows from the database
         List<Artis> artisList = artistRepository.findAllArtists();
         List<Show> shows = showRepository.findAllShows();
         
-        // Tambahkan ke model
+        // Add the data to the model so that Thymeleaf can use it
         model.addAttribute("artisList", artisList);
         model.addAttribute("shows", shows);
-        return "memberAddSetlist"; // Nama file HTML
+    
+        return "memberAddSetlist";  // Name of your HTML file (view)
     }
+    
   
     @PostMapping("/member/add-setlist")
     public String addSetlist(@RequestParam("setlistName") String namaLagu,
                              @RequestParam("showId") int showId,
-                             @RequestParam("artisId") int artisId,
+                             @RequestParam("artistId") int artistId,  // Capture artistId from the form
+                             @RequestParam("namaArtis") String namaArtis, // Capture artist name
                              RedirectAttributes redirectAttributes) {
         try {
-            String showTerkait = setListRepository.getShowNameById(showId); // Ambil nama show
-            String artisTerkait = setListRepository.getArtisNameById(artisId); // Ambil nama artis
-            setListRepository.addSetlist(namaLagu, showTerkait, showId, artisTerkait, artisId); // Simpan ke database
+            String showTerkait = setListRepository.getShowNameById(showId); // Get show name by ID
+            // Call the addSetlist method with artistId and namaArtis
+            setListRepository.addSetlist(namaLagu, showTerkait, showId, artistId, namaArtis);
+    
             redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil ditambahkan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menambahkan setlist: " + e.getMessage());
         }
-        return "redirect:/MemberAddSetlist"; // Kembali ke
+        return "redirect:/MemberAddSetlist"; // Redirect back
     }
+    
+    
     
     /**
      * Menampilkan halaman MemberKomentar.html
@@ -119,39 +126,39 @@ public class MemberController {
         return "MemberKomentar"; // The page where you want to show the dropdown
     }
 
-    // @Autowired
-    // private CommentsService commentsService;
-    //   // Menyuntikkan MemberRepository
+    @Autowired
+    private CommentsService commentsService;
+      // Menyuntikkan MemberRepository
     
-    // @PostMapping("/member/comment")
-    // public String submitComment(@RequestParam String commentText, 
-    //                             @RequestParam int showId, 
-    //                             HttpSession session, 
-    //                             RedirectAttributes redirectAttributes) {
+    @PostMapping("/member/comment")
+    public String submitComment(@RequestParam String commentText, 
+                                @RequestParam int showId, 
+                                HttpSession session, 
+                                RedirectAttributes redirectAttributes) {
         
-    //     // Get the username from the session
-    //     String username = (String) session.getAttribute("username");
+        // Get the username from the session
+        String username = (String) session.getAttribute("username");
         
-    //     if (username == null) {
-    //         redirectAttributes.addFlashAttribute("errorMessage", "Username tidak ditemukan. Silakan login terlebih dahulu.");
-    //         return "redirect:/MemberKomentar";  // Redirect to login page
-    //     }
+        if (username == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Username tidak ditemukan. Silakan login terlebih dahulu.");
+            return "redirect:/MemberKomentar";  // Redirect to login page
+        }
         
-    //     // Fetch the member by username
-    //     Member member = memberRepository.findByUsername(username);
+        // Fetch the member by username
+        Member member = memberRepository.findByUsername(username);
         
-    //     if (member == null) {
-    //         redirectAttributes.addFlashAttribute("errorMessage", "Username tidak ditemukan.");
-    //         return "redirect:/MemberKomentar?showId=" + showId;
-    //     }
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Username tidak ditemukan.");
+            return "redirect:/MemberKomentar?showId=" + showId;
+        }
         
-    //     // Create the comment and save it
-    //     Comment comment = new Comment(0, member.getId(), showId, commentText, new Timestamp(System.currentTimeMillis()));
-    //     commentsService.addComment(comment);
+        // Create the comment and save it
+        Comment comment = new Comment(0, member.getId(), showId, commentText, new Timestamp(System.currentTimeMillis()));
+        commentsService.addComment(comment);
         
-    //     redirectAttributes.addFlashAttribute("successMessage", "Komentar berhasil dikirim!");
-    //     return "redirect:/MemberKomentar?showId=" + showId;
-    // }
+        redirectAttributes.addFlashAttribute("successMessage", "Komentar berhasil dikirim!");
+        return "redirect:/MemberKomentar?showId=" + showId;
+    }
     
     
 
@@ -161,9 +168,23 @@ public class MemberController {
      * Menampilkan halaman MemberHistory.html
      */
     @GetMapping("/MemberHistory")
-    public String showMemberHistoryPage() {
-        return "MemberHistory"; // Mengarahkan ke MemberHistory.html
+    public String showMemberHistoryPage(Model model) {
+        // Ambil data langsung dari tabel setlist
+        List<Setlist> setlists = setlistRepository.findAllSetlistForHistory();
+    
+        // Debug log untuk memastikan data
+        setlists.forEach(setlist ->
+            System.out.println("Setlist: " + setlist.getNamaLagu() +
+                               ", Show: " + setlist.getShowTerkait() +
+                               ", Artist: " + setlist.getNamaArtis())
+        );
+    
+        // Kirim data ke view
+        model.addAttribute("setlists", setlists);
+        return "MemberHistory";
     }
+
+   
 
     /**
      * Memproses login dan memvalidasi username & password
@@ -255,4 +276,75 @@ public String handleLogin(@RequestParam String username,
         return "redirect:/admin/ManageUser";
     }
 
+    @GetMapping("/member/MemberAddSetlist")
+    public void downloadSetlist(HttpServletResponse response) throws IOException {
+        // Set header for file download
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"setlist.csv\"");
+    
+        // Get setlist data from the database
+        List<Setlist> setlists = setlistRepository.findAllSetList();
+    
+        // Write data to the output stream as CSV
+        PrintWriter writer = response.getWriter();
+        writer.println("ID, Nama Artis, Nama Lagu, Nama Show");  // Column headers
+    
+        // Write each setlist row to the CSV
+        for (Setlist setlist : setlists) {
+            writer.println(setlist.getId() + "," + setlist.getNamaArtis() + "," + setlist.getNamaLagu() + "," + setlist.getShowTerkait());
+        }
+    
+        writer.flush();
+        writer.close();
+    }
+    
+    @GetMapping("/editSetlist")
+    public String editSetlist(@RequestParam int id, Model model) {
+        // Ambil data setlist berdasarkan ID
+        Setlist setlist = setlistRepository.findById(id);
+        if (setlist == null) {
+            throw new RuntimeException("Setlist tidak ditemukan");
+        }
+    
+        // Ambil daftar artis dari repository
+        List<Artis> artisList = artistRepository.findAllArtists();
+    
+        // Tambahkan data ke model
+        model.addAttribute("setlist", setlist);
+        model.addAttribute("artisList", artisList); // Data artis untuk dropdown
+    
+        return "edit"; // Nama file HTML
+    }
+    
+    @PostMapping("/updateSetlist")
+public String updateSetlist(@RequestParam int id,
+                             @RequestParam String namaLagu,
+                             @RequestParam String showTerkait,
+                             @RequestParam String namaArtis,  // Nama artis diambil dari input teks
+                             RedirectAttributes redirectAttributes) {
+    try {
+        // Cari setlist berdasarkan ID
+        Setlist setlist = setlistRepository.findById(id);
+        if (setlist == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Setlist tidak ditemukan.");
+            return "redirect:/MemberHistory";
+        }
+
+        // Update data
+        setlist.setNamaLagu(namaLagu);
+        setlist.setShowTerkait(showTerkait);
+        setlist.setNamaArtis(namaArtis); // Set nama artis sesuai dengan input pengguna
+
+        // Simpan perubahan ke repository
+        setlistRepository.save(setlist);
+
+        // Pesan sukses
+        redirectAttributes.addFlashAttribute("successMessage", "Setlist berhasil diperbarui!");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Gagal memperbarui setlist: " + e.getMessage());
+        e.printStackTrace(); // Debug error ke console
+    }
+    return "redirect:/MemberHistory";
 }
+}
+

@@ -1,18 +1,16 @@
-package com.example.demo.Comment;
+package com.example.demo.Member;
 
 import java.sql.Timestamp;
 
 public class Comment {
     private int id;
-    private int memberId; // Ganti dari String username menjadi int memberId
     private int showId;
     private String commentText;
     private Timestamp createdAt;
 
     // Constructor
-    public Comment(int id, int memberId, int showId, String commentText, Timestamp createdAt) {
+    public Comment(int id, int showId, String commentText, Timestamp createdAt) {
         this.id = id;
-        this.memberId = memberId; // Ubah parameter username menjadi memberId
         this.showId = showId;
         this.commentText = commentText;
         this.createdAt = createdAt;
@@ -25,14 +23,6 @@ public class Comment {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getMemberId() { // Ubah getter dari username menjadi memberId
-        return memberId;
-    }
-
-    public void setMemberId(int memberId) { // Ubah setter dari username menjadi memberId
-        this.memberId = memberId;
     }
 
     public int getShowId() {

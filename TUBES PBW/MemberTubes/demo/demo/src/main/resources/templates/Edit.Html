@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Setlist</title>
+    <style>
+        /* CSS styling sama seperti sebelumnya */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .btn-back {
+            background-color: #d9534f;
+        }
+
+        .btn-back:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Edit Setlist</h1>
+        <form action="/updateSetlist" method="post">
+            <!-- ID Setlist (Hidden Field) -->
+            <input type="hidden" name="id" th:value="${setlist.id}">
+
+            <!-- Nama Lagu -->
+            <label for="namaLagu">Nama Lagu:</label>
+            <input type="text" id="namaLagu" name="namaLagu" th:value="${setlist.namaLagu}" required>
+
+            <!-- Show Terkait -->
+            <label for="showTerkait">Show Terkait:</label>
+            <input type="text" id="showTerkait" name="showTerkait" th:value="${setlist.showTerkait}" required>
+
+            <!-- Nama Artis -->
+            <label for="namaArtis">Nama Artis:</label>
+            <select id="namaArtis" name="namaArtis" required>
+                <option th:each="artis : ${artisList}" 
+                        th:value="${artis.namaArtis}" 
+                        th:text="${artis.namaArtis}" 
+                        th:selected="${artis.namaArtis} == ${setlist.namaArtis}">
+                </option>
+            </select>
+
+            <div class="btn-container">
+                <!-- Tombol Back -->
+                <button type="button" class="btn-back" onclick="history.back()">Kembali</button>
+                <!-- Tombol Simpan -->
+                <button type="submit">Simpan</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
